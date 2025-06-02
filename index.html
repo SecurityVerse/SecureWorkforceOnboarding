@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding en Ciberseguridad</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide {
+            width: 90%;
+            max-width: 1200px;
+            height: 90%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            display: none;
+            overflow-y: auto;
+            color: #333;
+            backdrop-filter: blur(10px);
+            position: absolute;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            z-index: 10;
+        }
+
+        .slide-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: -40px -40px 30px -40px;
+            padding: 25px 40px;
+            border-radius: 20px 20px 0 0;
+            color: white;
+            position: relative;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .slide-header .title-block {
+            flex-grow: 1; 
+        }
+
+        .slide-header h1 {
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .slide-header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+        
+        .slide-progress-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; 
+            line-height: 1.2; 
+            margin-left: 15px; 
+        }
+
+        .slide-header .slide-timer {
+            font-size: 0.8em; 
+            color: rgba(255, 255, 255, 0.8); 
+            margin-bottom: 3px; 
+            background-color: rgba(0,0,0,0.1);
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .slide-header .slide-number {
+            font-size: 0.9em; 
+            color: white; 
+            background-color: rgba(255, 255, 255, 0.2); 
+            padding: 3px 10px; 
+            border-radius: 15px; 
+        }
+
+
+        .slide-content {
+             padding-top: 10px;
+        }
+
+        .slide-content h2 {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+
+        .slide-content h3 {
+            font-size: 1.4em;
+            color: #e74c3c;
+            margin: 20px 0 10px 0;
+        }
+        
+        .slide-content p, .slide-content li {
+            font-size: 1.05em;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        .slide-content ul {
+            list-style-position: outside;
+            padding-left: 25px;
+        }
+        .slide-content ul li {
+            margin-bottom: 8px;
+        }
+        .slide-content strong {
+            color: #2c3e50;
+        }
+      
+
+        .content-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            margin: 25px 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+         .content-box h3, .content-box p, .content-box li {
+            color: white !important;
+        }
+         .content-box h3 {
+            margin-top: 0;
+            font-size: 1.3em;
+        }
+         .content-box strong {
+            color: white !important;
+        }
+
+
+        .regulation-card {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .regulation-card h3, .regulation-card p, .regulation-card li {
+            color: white !important;
+        }
+        .regulation-card h3 {
+            margin-top: 0;
+            font-size: 1.3em;
+        }
+        .regulation-card strong {
+             color: white !important;
+        }
+
+        .content-box:hover, .regulation-card:hover {
+            transform: translateY(-5px); 
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); 
+        }
+        
+        .image-placeholder {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            padding:10px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 10px;
+            text-align: center;
+        }
+        .image-placeholder img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto;
+        }
+        .image-placeholder p {
+            font-size: 0.9em;
+            color: #555;
+            margin-top:5px;
+        }
+
+
+        .no-no-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .no-no-item {
+            background: rgba(231, 76, 60, 0.1);
+            border-left: 5px solid #e74c3c;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .no-no-item h4 {
+            color: #c0392b;
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+        .no-no-item p {
+            font-size: 0.95em;
+            color: #555;
+            margin-bottom: 0;
+        }
+
+
+        .slide-indicator {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: white;
+            transform: scale(1.3);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .control-btn:hover {
+            background: white;
+            color: #2c3e50;
+            transform: translateY(-2px);
+             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        .control-btn:disabled {
+            background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: translateY(0);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #languageToggleBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff9a8b 0%, #ff6a88 100%);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+        #languageToggleBtn:hover {
+            transform: scale(1.05);
+        }
+        
+        #fullscreenToggleBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 195px; /* Ajustado para no superponerse con el botón de idioma */
+            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%); 
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+        #fullscreenToggleBtn:hover {
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="slide active" id="slide-0">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🔐 Onboarding en Ciberseguridad</span>
+                        <span class="lang-en">🔐 Cybersecurity Onboarding</span>
+                    </h1>
+                    <p class="subtitle">
+                        <span class="lang-es">Guía para Nuevos Empleados</span>
+                        <span class="lang-en">A Guide for New Employees</span>
+                    </p>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content" style="text-align: center; margin-top: 40px;">
+                <div class="image-placeholder">
+                    <img src="img/1.png" alt="Cybersecurity Onboarding Welcome">
+                </div>
+                <h2>
+                    <span class="lang-es">¡Bienvenidos!</span>
+                    <span class="lang-en">Welcome!</span>
+                </h2>
+                <p style="font-size: 1.2em; color: #555; margin: 15px 0;">
+                    <span class="lang-es">Hoy hablaremos sobre un tema clave para nuestro trabajo diario: la ciberseguridad.</span>
+                    <span class="lang-en">Today we'll discuss a key topic for our daily work: cybersecurity.</span>
+                </p>
+                <div class="content-box" style="margin-top: 30px;">
+                    <h3>
+                        <span class="lang-es">En un entorno cada vez más digitalizado, proteger la información es responsabilidad de todos.</span>
+                        <span class="lang-en">In an increasingly digital environment, protecting information is everyone's responsibility.</span>
+                    </h3>
+                    <p>
+                        <span class="lang-es">Este entrenamiento está diseñado para proporcionarles los conocimientos básicos necesarios para identificar y enfrentar amenazas comunes, y aplicar buenas prácticas que salvaguarden los activos de la organización.</span>
+                        <span class="lang-en">This training is designed to provide you with the basic knowledge needed to identify and address common threats, and to apply best practices that safeguard the organization's assets.</span>
+                    </p>
+                </div>
+                <p style="margin-top: 25px; font-size: 0.9em; color: #999;">
+                     <span class="lang-es">Uso Interno Solamente</span>
+                     <span class="lang-en">Internal Use Only</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-1">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🎯 Objetivo del Entrenamiento</span>
+                        <span class="lang-en">🎯 Training Objective</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <p>
+                    <span class="lang-es">Brindar a los empleados de nuevo ingreso conocimientos básicos de ciberseguridad, ofreciendo una visión clara sobre:</span>
+                    <span class="lang-en">To provide new employees with foundational cybersecurity knowledge, offering a clear understanding of:</span>
+                </p>
+                <ul>
+                    <li>
+                        <span class="lang-es">La importancia de la ciberseguridad en el entorno corporativo.</span>
+                        <span class="lang-en">The importance of cybersecurity in the corporate environment.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Las amenazas comunes a las que estamos expuestos (common threats).</span>
+                        <span class="lang-en">Common threats we are exposed to.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Buenas prácticas (best practices) para proteger la información en el día a día.</span>
+                        <span class="lang-en">Best practices for protecting information daily.</span>
+                    </li>
+                </ul>
+                <p>
+                    <span class="lang-es">Al finalizar, serás capaz de reconocer riesgos (risks) y aplicar medidas preventivas efectivas.</span>
+                    <span class="lang-en">By the end, you will be able to recognize risks and apply effective preventative measures.</span>
+                </p>
+                <div class="image-placeholder">
+                    <img src="img/2.png" alt="Training Objective Illustration">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-2">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🗓️ Agenda (Tiempo total: 30 minutos)</span>
+                        <span class="lang-en">🗓️ Agenda (Total Time: 30 minutes)</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>Introducción a la Ciberseguridad (10 min):</strong> ¿Por qué es importante y cómo nos afecta?</span>
+                        <span class="lang-en"><strong>Introduction to Cybersecurity (10 min):</strong> Why is it important and how does it affect us?</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Regulaciones Aplicables (3 min):</strong> Regulaciones relevantes para la protección de datos (data protection).</span>
+                        <span class="lang-en"><strong>Applicable Regulations (3 min):</strong> Regulations relevant to data protection.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Actores de Amenazas (Threat Actors) (4 min):</strong> Quiénes atacan y cómo operan.</span>
+                        <span class="lang-en"><strong>Threat Actors (4 min):</strong> Who attacks and how do they operate?</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Amenazas Comunes y Ejemplos (7 min):</strong> Estafas (scams) más frecuentes.</span>
+                        <span class="lang-en"><strong>Common Threats and Examples (7 min):</strong> Most frequent scams.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Situaciones Comunes y Cómo Evitarlas (5 min)</strong></span>
+                        <span class="lang-en"><strong>Common Situations and How to Avoid Them (5 min)</strong></span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Los "Do Nots" de la Ciberseguridad (2 min):</strong> Acciones que debemos evitar para proteger la información.</span>
+                        <span class="lang-en"><strong>The Cybersecurity "Do Nots" (2 min):</strong> Actions to avoid to protect information.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Respuesta a Incidentes (Incident Response) (2 min):</strong> Qué hacer si detectamos una amenaza.</span>
+                        <span class="lang-en"><strong>Incident Response (2 min):</strong> What to do if we detect a threat.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Reflexión Final y Preguntas (2 min):</strong> La seguridad es responsabilidad de todos.</span>
+                        <span class="lang-en"><strong>Final Thoughts and Questions (2 min):</strong> Security is everyone's responsibility.</span>
+                    </li>
+                </ul>
+                <div class="image-placeholder">
+                    <img src="img/3.png" alt="Agenda Overview">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-3">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🛡️ 1. Introducción a la Ciberseguridad</span>
+                        <span class="lang-en">🛡️ 1. Introduction to Cybersecurity</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">¿Qué es la Ciberseguridad?</span>
+                    <span class="lang-en">What is Cybersecurity?</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Es el conjunto de prácticas, tecnologías y procesos diseñados para proteger sistemas, redes y datos de ataques digitales (digital attacks).</span>
+                    <span class="lang-en">It's the set of practices, technologies, and processes designed to protect systems, networks, and data from digital attacks.</span>
+                </p>
+                <h3>
+                    <span class="lang-es">Tres Principios Clave (Tríada CIA):</span>
+                    <span class="lang-en">Three Key Principles (CIA Triad):</span>
+                </h3>
+                 <div class="image-placeholder">
+                    <img src="img/4.png" alt="Tríada de la Ciberseguridad: Disponibilidad, Integridad, Confidencialidad">
+                    <p>
+                        <span class="lang-es">Diagrama de la Tríada CIA</span>
+                        <span class="lang-en">CIA Triad Diagram</span>
+                    </p>
+                </div>
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>Confidencialidad (Confidentiality):</strong> Garantizar que solo las personas autorizadas accedan a la información.</span>
+                        <span class="lang-en"><strong>Confidentiality:</strong> Ensuring that only authorized individuals access information.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Integridad (Integrity):</strong> Mantener la exactitud y consistencia de la información.</span>
+                        <span class="lang-en"><strong>Integrity:</strong> Maintaining the accuracy and consistency of information.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Disponibilidad (Availability):</strong> Asegurar que los datos estén accesibles cuando sea necesario.</span>
+                        <span class="lang-en"><strong>Availability:</strong> Ensuring that data is accessible when needed.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-4">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">❓ ¿Por qué es importante para nosotros?</span>
+                        <span class="lang-en">❓ Why is Cybersecurity Important for Us?</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Manejo de Datos Sensibles (Sensitive Data)</span>
+                    <span class="lang-en">Handling Sensitive Data</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Nuestro trabajo implica el manejo de información confidencial de clientes, como datos personales y financieros, lo que nos convierte en un objetivo (target) atractivo para los ciberdelincuentes (cybercriminals).</span>
+                    <span class="lang-en">Our work involves handling confidential client information, such as personal and financial data, making us an attractive target for cybercriminals.</span>
+                </p>
+                <p>
+                    <span class="lang-es"><strong>Proteger esta información evita filtraciones (breaches) y mantiene la confianza de nuestros stakeholders.</strong></span>
+                    <span class="lang-en"><strong>Protecting this information prevents breaches and maintains the trust of our stakeholders.</strong></span>
+                </p>
+
+                <h2>
+                    <span class="lang-es">Impacto Potencial de un Ataque Exitoso</span>
+                    <span class="lang-en">Potential Impact of a Successful Attack</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Un ataque podría:</span>
+                    <span class="lang-en">An attack could:</span>
+                </p>
+                <ul>
+                    <li>
+                        <span class="lang-es">Interrumpir las operaciones.</span>
+                        <span class="lang-en">Disrupt operations.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Causar pérdidas económicas significativas.</span>
+                        <span class="lang-en">Cause significant financial losses.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Dañar la imagen y reputación de la empresa.</span>
+                        <span class="lang-en">Damage the company's image and reputation.</span>
+                    </li>
+                </ul>
+                <div class="image-placeholder">
+                    <img src="img/5.png" alt="Impact of Cyber Attacks">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-5">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">⚠️ Ejemplos de Amenazas Comunes</span>
+                        <span class="lang-en">⚠️ Examples of Common Threats</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>Ingeniería Social (Social Engineering):</strong> Engañar a individuos para que divulguen datos como contraseñas (passwords).</span>
+                        <span class="lang-en"><strong>Social Engineering:</strong> Deceiving individuals into divulging data such as passwords.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Acceso No Autorizado (Unauthorized Access):</strong> Cuando alguien consigue credenciales de acceso (access credentials) y entra a los sistemas sin permiso.</span>
+                        <span class="lang-en"><strong>Unauthorized Access:</strong> When someone obtains access credentials and enters systems without permission.</span>
+                    </li>
+                </ul>
+                <p>
+                    <span class="lang-es">Estos son solo la punta del iceberg. Veremos más amenazas en detalle más adelante.</span>
+                    <span class="lang-en">These are just the tip of the iceberg. We'll explore more threats in detail later.</span>
+                </p>
+                <div class="image-placeholder">
+                    <img src="img/6.png" alt="Examples of Common Cyber Threats">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-6">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">📜 2. Regulaciones Aplicables</span>
+                        <span class="lang-en">📜 2. Applicable Regulations</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div class="regulation-card">
+                    <h3>
+                        <span class="lang-es">🔒 Regulaciones de Protección de Datos Relevantes</span>
+                        <span class="lang-en">🔒 Relevant Data Protection Regulations</span>
+                    </h3>
+                    <p>
+                        <span class="lang-es">Como entidad regulada, debemos adherirnos a estándares específicos para proteger la información confidencial y controles de seguridad (security controls) mínimos para asegurar el cumplimiento (compliance).</span>
+                        <span class="lang-en">As a regulated entity, we must adhere to specific standards for protecting confidential information and minimum security controls to ensure compliance.</span>
+                    </p>
+                    <p>
+                        <span class="lang-es"><strong>✅ Beneficios:</strong> Cumplir con estas regulaciones ayuda a prevenir sanciones legales, fortalecer la confianza del cliente y demostrar el compromiso serio de la organización con la seguridad de la información.</span>
+                        <span class="lang-en"><strong>✅ Benefits:</strong> Compliance helps prevent legal penalties, strengthens client confidence, and demonstrates our serious commitment to information security.</span>
+                    </p>
+                </div>
+                <div class="regulation-card">
+                    <h3>
+                        <span class="lang-es">💰 Normas de Privacidad y Datos Financieros</span>
+                        <span class="lang-en">💰 Privacy and Financial Data Rules</span>
+                    </h3>
+                    <p>
+                        <span class="lang-es">Estas normas rigen la privacidad (privacy) de los datos personales y la información financiera de nuestros clientes y stakeholders.</span>
+                        <span class="lang-en">These rules govern the privacy of personal data and financial information of our clients and stakeholders.</span>
+                    </p>
+                    <p>
+                        <span class="lang-es"><strong>✅ Beneficios:</strong> Adherirse a estos estándares no solo evita problemas legales, sino que también refuerza nuestra imagen, mostrando que protegemos lo que nuestros clientes más valoran: su privacidad.</span>
+                        <span class="lang-en"><strong>✅ Benefits:</strong> Adherence not only avoids legal issues but also enhances our image by showing we protect what our clients value most: their privacy.</span>
+                    </p>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/7.png" alt="Compliance and Regulations">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-7">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🕵️ 3. Actores de Amenazas (Threat Actors)</span>
+                        <span class="lang-en">🕵️ 3. Threat Actors & Criminal Organizations</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">¿Quiénes Están Detrás de los Ataques?</span>
+                    <span class="lang-en">Who's Behind the Attacks?</span>
+                </h2>
+                <p>
+                    <span class="lang-es">¡Ahora veamos quiénes están detrás de los ataques y cómo operan!</span>
+                    <span class="lang-en">Let's look at who is behind the attacks and how they operate!</span>
+                </p>
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>Hackers Maliciosos:</strong> Buscan acceso no autorizado a sistemas para hurtar información o dinero.</span>
+                        <span class="lang-en"><strong>Malicious Hackers:</strong> Seek unauthorized access to systems to steal information or money.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Grupos Organizados:</strong> Pueden trabajar para gobiernos o mafias digitales, atacando compañías con información valiosa.</span>
+                        <span class="lang-en"><strong>Organized Groups:</strong> May work for governments or digital mafias, targeting companies with valuable information.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Ciberdelincuentes Comunes:</strong> Hurtan datos y los venden en la dark web o estafan a usuarios.</span>
+                        <span class="lang-en"><strong>Common Cybercriminals:</strong> Steal data and sell it on the dark web or scam users.</span>
+                    </li>
+                </ul>
+                <h2>
+                    <span class="lang-es">¿Cómo Operan? (Basado en el Framework MITRE ATT&CK)</span>
+                    <span class="lang-en">How They Operate (Based on MITRE ATT&CK Framework)</span>
+                </h2>
+                <p>
+                    <span class="lang-es">¡Veamos cómo actúan los atacantes en cada fase y qué tácticas utilizan para lograr sus objetivos!</span>
+                    <span class="lang-en">Let's see how attackers act in each phase and what tactics they use to achieve their objectives!</span>
+                </p>
+                <ol>
+                    <li>
+                        <span class="lang-es"><strong>Reconocimiento (Reconnaissance):</strong> Investigan a las víctimas, revisando redes sociales y correos filtrados (leaked emails).</span>
+                        <span class="lang-en"><strong>Reconnaissance:</strong> Investigate victims, reviewing social media and leaked emails.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Acceso Inicial (Initial Access):</strong> Envían correos de phishing o usan malware para robar credenciales (credentials).</span>
+                        <span class="lang-en"><strong>Initial Access:</strong> Send phishing emails or use malware to steal credentials.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Persistencia (Persistence):</strong> Se quedan dentro del sistema sin ser detectados.</span>
+                        <span class="lang-en"><strong>Persistence:</strong> Remain inside the system undetected.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Exfiltración de Datos (Data Exfiltration):</strong> Extraen información y la venden o usan para chantaje (blackmail).</span>
+                        <span class="lang-en"><strong>Data Exfiltration:</strong> Extract information and sell it or use it for blackmail.</span>
+                    </li>
+                </ol>
+                <div class="image-placeholder">
+                    <img src="img/8.png" alt="Threat Actors and Criminal Organizations">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" id="slide-8">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🎣 4. Amenazas Comunes: Phishing y Vishing</span>
+                        <span class="lang-en">🎣 4. Common Threats: Phishing & Vishing</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Phishing (Correo) y Vishing (Voz/Llamada)</span>
+                    <span class="lang-en">Phishing (Email) and Vishing (Voice/Call)</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Qué son: Engaños por correo (phishing) o llamadas (vishing) para obtener acceso no autorizado a tus datos.</span>
+                    <span class="lang-en">What they are: Deceptive emails (phishing) or calls (vishing) to trick you into giving unauthorized access to data.</span>
+                </p>
+                <p>
+                    <span class="lang-es"><strong>Ejemplo Phishing:</strong> Correo falso de "IT Support" con un enlace malicioso (malicious link).</span>
+                    <span class="lang-en"><strong>Phishing Example:</strong> A fake email from "IT Support" with a malicious link.</span>
+                </p>
+                <p>
+                    <span class="lang-es"><strong>Ejemplo Vishing:</strong> Una llamada de alguien haciéndose pasar por un colega pidiendo información de un cliente para 'procesar una reclamación urgente', cuando en realidad está recopilando información para fraude (fraud).</span>
+                    <span class="lang-en"><strong>Vishing Example:</strong> A call from someone posing as a colleague asking for specific client information for an 'urgent claim,' when they are actually gathering information for fraud.</span>
+                </p>
+                <h3>
+                    <span class="lang-es">Cómo Detectarlos:</span>
+                    <span class="lang-en">How to Spot Them:</span>
+                </h3>
+                <ul>
+                    <li>
+                        <span class="lang-es">Desconfía de mensajes con enlaces (links) que no reconoces.</span>
+                        <span class="lang-en">Distrust messages with links you don't recognize.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Verifica si conoces al remitente (sender) del mensaje.</span>
+                        <span class="lang-en">Verify the sender if you don't know them.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Si una llamada suena extraña o te pide datos personales, ¡cuelga y confirma por otro canal!</span>
+                        <span class="lang-en">If a call sounds strange or asks for personal data, hang up and confirm through another channel!</span>
+                    </li>
+                </ul>
+                 <div class="content-box">
+                    <h4>
+                        <span class="lang-es">Ejemplo Detallado de Phishing:</span>
+                        <span class="lang-en">Detailed Phishing Example:</span>
+                    </h4>
+                    <p>
+                        <span class="lang-es">"Un correo electrónico que aparenta ser del 'Departamento de Reclamaciones' solicitando verificar credenciales para procesar un reembolso urgente de un cliente, con un enlace que lleva a un sitio falso idéntico a nuestro portal de reclamaciones."</span>
+                        <span class="lang-en">"An email appearing to be from the 'Claims Department' asking you to verify credentials to process an urgent client refund, with a link that leads to a fake site identical to our claims portal."</span>
+                    </p>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/9.png" alt="Phishing and Vishing Examples">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-9">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🦠 Amenazas Comunes: Malware y Ransomware</span>
+                        <span class="lang-en">🦠 Common Threats: Malware & Ransomware</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Malware (Software Malicioso)</span>
+                    <span class="lang-en">Malware (Malicious Software)</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Qué es el malware: Software malicioso que daña o toma información sin permiso.</span>
+                    <span class="lang-en">What is malware: Malicious software that damages or steals information without permission.</span>
+                </p>
+                <h2>Ransomware</h2>
+                <p>
+                    <span class="lang-es">Qué es el ransomware: Malware que bloquea datos (data encryption) y exige un pago (ransom) para liberarlos.</span>
+                    <span class="lang-en">What is ransomware: Malware that locks data and demands payment to release it.</span>
+                </p>
+                <h3>
+                    <span class="lang-es">Consejos Clave (Key Tips):</span>
+                    <span class="lang-en">Key Tips:</span>
+                </h3>
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>NO hacer clic</strong> en enlaces (links) sospechosos.</span>
+                        <span class="lang-en"><strong>DO NOT click</strong> on suspicious links.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Mantener el equipo y software <strong>actualizado (updated)</strong>.</span>
+                        <span class="lang-en">Keep your devices and software <strong>updated</strong>.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Verificar siempre los remitentes (senders) de correos y mensajes.</span>
+                        <span class="lang-en">Always verify senders of emails and messages.</span>
+                    </li>
+                </ul>
+                <h3>
+                    <span class="lang-es">Ejemplos Recientes de Impacto de Ransomware:</span>
+                    <span class="lang-en">Recent Examples of Ransomware Impact:</span>
+                </h3>
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>Ataque a Operador de Sistema de Peaje (Feb 2025):</strong> Una compañía que maneja un sistema de peaje sufrió un ciberataque que dañó sus sistemas. Esto afectó cómo los conductores podían recargar sus cuentas y causó preocupación por multas incorrectas. Las autoridades investigaron el ataque.</span>
+                        <span class="lang-en"><strong>Attack on Toll System Operator (Feb 2025):</strong> A company managing a toll system suffered a cyberattack that damaged its systems. This affected how drivers could recharge their accounts and caused concern over incorrect fines. Authorities investigated the attack.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Ataque a Terminales Portuarias (Abr 2024):</strong> Una compañía que maneja carga en un puerto principal fue atacada por un virus. Esto causó retrasos en la entrega y recogida de productos, afectando la cadena de suministro (supply chain) de la isla. El FBI asistió en la investigación.</span>
+                        <span class="lang-en"><strong>Attack on Port Terminals (Apr 2024):</strong> A company handling cargo at a major port was attacked by a virus. This caused delays in product delivery and pickup, affecting the island's supply chain. The FBI assisted in the investigation.</span>
+                    </li>
+                </ul>
+                <div class="image-placeholder">
+                    <img src="img/10.png" alt="Malware and Ransomware Illustrations">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-10">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🔑 5. Situaciones Comunes: Contraseñas Seguras (Secure Passwords)</span>
+                        <span class="lang-en">🔑 5. Common Situations: Secure Passwords</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Lo que NO se debe hacer:</span>
+                    <span class="lang-en">What NOT to do:</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Usar contraseñas fáciles o repetirlas en varios lugares.</span>
+                    <span class="lang-en">Using easy passwords or repeating them in multiple places.</span>
+                </p>
+                <h2>
+                    <span class="lang-es">¿Cómo hacerlo bien? ✅</span>
+                    <span class="lang-en">How to do it right? ✅</span>
+                </h2>
+                <ul>
+                    <li>
+                        <span class="lang-es">Usa contraseñas <strong>largas</strong> con letras, números y símbolos (special characters).</span>
+                        <span class="lang-en">Use <strong>long passwords</strong> with letters, numbers, and special characters.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Evita usar información personal, como tu nombre o fecha de nacimiento.</span>
+                        <span class="lang-en">Avoid using personal information, like your name or date of birth.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Cambia la contraseña si crees que alguien más la sabe (compromised).</span>
+                        <span class="lang-en">Change your password if you think it has been compromised.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Usa una aplicación para administrar contraseñas (password manager) de forma segura.</span>
+                        <span class="lang-en">Use a password manager application to securely store your passwords.</span>
+                    </li>
+                </ul>
+                <div class="content-box">
+                    <p>
+                        <span class="lang-es"><strong>Ejemplo:</strong> No uses contraseñas como "Compañia2025". Mejor algo como "MiC@ntr@señaFuerT3!".</span>
+                        <span class="lang-en"><strong>Example:</strong> Don't use passwords like "Company2025". Better something like "My$tr0ngP@sswOrdEx@mple!".</span>
+                    </p>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/11.png" alt="Secure Password Best Practices">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" id="slide-11">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">📱 Situaciones Comunes: MFA (Multi-Factor Authentication)</span>
+                        <span class="lang-en">📱 Common Situations: MFA (Multi-Factor Authentication)</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Lo que NO se debe hacer:</span>
+                    <span class="lang-en">What NOT to do:</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Solo usar una contraseña para entrar a los sistemas.</span>
+                    <span class="lang-en">Only using a password to access systems.</span>
+                </p>
+                <h2>
+                    <span class="lang-es">¿Cómo hacerlo bien? ✅</span>
+                    <span class="lang-en">How to do it right? ✅</span>
+                </h2>
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>Activa un segundo paso de seguridad (MFA)</strong>, como un código enviado a tu celular (one-time password) o una aplicación de autenticación (authenticator app).</span>
+                        <span class="lang-en"><strong>Enable a second security step (MFA)</strong>, like a one-time password sent to your phone or an authenticator app.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Esto hace mucho más difícil que alguien entre a tu cuenta, aunque sepa tu contraseña.</span>
+                        <span class="lang-en">This makes it much harder for someone to access your account, even if they know your password.</span>
+                    </li>
+                </ul>
+                <div class="image-placeholder">
+                    <img src="img/12.png" alt="Multi-Factor Authentication Setup">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-12">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🛡️ Situaciones Comunes: Conexión Segura y VPN</span>
+                        <span class="lang-en">🛡️ Common Situations: Secure Connection & VPN</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Lo que NO se debe hacer:</span>
+                    <span class="lang-en">What NOT to do:</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Usar Wi-Fi público sin protección, como en cafeterías o aeropuertos.</span>
+                    <span class="lang-en">Using public Wi-Fi without protection, like in coffee shops or airports.</span>
+                </p>
+                <h2>
+                    <span class="lang-es">¿Cómo hacerlo bien? ✅</span>
+                    <span class="lang-en">How to do it right? ✅</span>
+                </h2>
+                <ul>
+                    <li>
+                        <span class="lang-es">Usa siempre la conexión segura de la empresa (VPN) cuando trabajes desde casa o fuera de la oficina.</span>
+                        <span class="lang-en">Always use the company's secure connection (VPN) when working from home or outside the office.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Si vas a enviar o recibir información importante, asegúrate de estar conectado de forma segura.</span>
+                        <span class="lang-en">If you're sending or receiving important information, make sure you're securely connected.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Cierra tu sesión (logout) cuando termines de trabajar.</span>
+                        <span class="lang-en">Log out when you finish working.</span>
+                    </li>
+                </ul>
+                 <div class="content-box">
+                    <p>
+                        <span class="lang-es"><strong>Ejemplo:</strong> "Cuando trabajes desde casa o en otro lugar, activa la VPN de la empresa para proteger la conexión y mantener seguros los datos."</span>
+                        <span class="lang-en"><strong>Example:</strong> "When working from home or another location, activate the company VPN to protect the connection and keep data secure."</span>
+                    </p>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/13.png" alt="VPN Secure Connection">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-13">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🚫 Situaciones Comunes: Zero Trust (Nunca confíes, siempre verifica)</span>
+                        <span class="lang-en">🚫 Common Situations: Zero Trust (Never trust, always verify)</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Principio Clave: "Nunca confíes, siempre verifica"</span>
+                    <span class="lang-en">Key Principle: "Never trust, always verify"</span>
+                </h2>
+                <h2>
+                    <span class="lang-es">Lo que NO se debe hacer:</span>
+                    <span class="lang-en">What NOT to do:</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Confiar en cualquier mensaje o llamada sin verificar.</span>
+                    <span class="lang-en">Trusting any message or call without verification.</span>
+                </p>
+                <h2>
+                    <span class="lang-es">¿Cómo hacerlo bien? ✅</span>
+                    <span class="lang-en">How to do it right? ✅</span>
+                </h2>
+                <ul>
+                    <li>
+                        <span class="lang-es">Siempre revisa si el mensaje o llamada es de alguien conocido y de confianza.</span>
+                        <span class="lang-en">Always check if the message or call is from someone known and trusted.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">No compartas contraseñas (passwords) con nadie, ni uses dispositivos que no sean de la empresa (unauthorized devices).</span>
+                        <span class="lang-en">Do not share passwords with anyone, nor use unauthorized devices for company information.</span>
+                    </li>
+                </ul>
+                <div class="content-box">
+                    <p>
+                        <span class="lang-es"><strong>Ejemplo:</strong> "Por seguir el principio de Zero Trust, llamó primero por teléfono y descubrió que el correo era falso (fake)."</span>
+                        <span class="lang-en"><strong>Example:</strong> "By following the Zero Trust principle, an employee called first by phone and discovered the email was fake."</span>
+                    </p>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/14.png" alt="Zero Trust Principle">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-14">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🎭 Situaciones Comunes: Ingeniería Social (Social Engineering)</span>
+                        <span class="lang-en">🎭 Common Situations: Social Engineering</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                 <h2>
+                    <span class="lang-es">¿Qué es? La manipulación psicológica para engañar a las personas y obtener información confidencial.</span>
+                    <span class="lang-en">What is it? Psychological manipulation to trick people into divulging confidential information.</span>
+                </h2>
+                <h2>
+                    <span class="lang-es">Lo que NO se debe hacer:</span>
+                    <span class="lang-en">What NOT to do:</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Confiar en desconocidos o en solicitudes sospechosas sin verificar.</span>
+                    <span class="lang-en">Trusting strangers or suspicious requests without verification.</span>
+                </p>
+                <h2>
+                    <span class="lang-es">¿Cómo hacerlo bien? ✅</span>
+                    <span class="lang-en">How to do it right? ✅</span>
+                </h2>
+                <ul>
+                    <li>
+                        <span class="lang-es">Desconfía de personas que intenten ingresar sin autorización a las instalaciones (tailgating).</span>
+                        <span class="lang-en">Be wary of people trying to gain unauthorized access to facilities (tailgating).</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">No reveles información sensible a desconocidos, incluso si parecen insistentes o urgentes.</span>
+                        <span class="lang-en">Do not reveal sensitive information to strangers, even if they seem insistent or urgent.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Desconfía de solicitudes urgentes de información, especialmente si llegan por correo o llamadas inesperadas.</span>
+                        <span class="lang-en">Be suspicious of urgent requests for information, especially if they come via unexpected email or calls.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Revisa cuidadosamente los correos electrónicos y desconfía de enlaces extraños o mensajes con errores de ortografía (typos).</span>
+                        <span class="lang-en">Carefully review emails and be wary of strange links or messages with typos.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Si alguien afirma ser parte del equipo técnico y no está identificado, consulta con tu supervisor antes de permitir el acceso.</span>
+                        <span class="lang-en">If someone claims to be part of the technical team and is not identified, consult with your supervisor before allowing access.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Reporta cualquier comportamiento sospechoso al equipo de Seguridad (Security Team).</span>
+                        <span class="lang-en">Report any suspicious behavior to the Security Team.</span>
+                    </li>
+                </ul>
+                <div class="content-box">
+                     <p>
+                        <span class="lang-es"><strong>Ejemplo:</strong> "Un visitante dijo ser del equipo técnico, pero al pedir su identificación (ID) y verificar, se descubrió que no estaba autorizado. Gracias a la verificación, se evitó un posible acceso no autorizado."</span>
+                        <span class="lang-en"><strong>Example:</strong> "A visitor claimed to be from the technical team, but upon asking for ID and verifying, it was discovered they were not authorized. Thanks to verification, a potential unauthorized access was prevented."</span>
+                    </p>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/15.png" alt="Social Engineering Awareness">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" id="slide-15">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">❌ 6. Los "Do Nots" en Ciberseguridad</span>
+                        <span class="lang-en">❌ 6. Cybersecurity "Do Nots"</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Acciones que DEBEMOS EVITAR para mantener la seguridad de la información.</span>
+                    <span class="lang-en">Actions to AVOID to maintain information security.</span>
+                </h2>
+                <h3>
+                    <span class="lang-es">🔒 Contraseñas (Passwords) y Accesos</span>
+                    <span class="lang-en">🔒 Passwords and Access</span>
+                </h3>
+                <div class="no-no-grid">
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO usar la misma contraseña en varias cuentas.</span>
+                            <span class="lang-en">DO NOT use the same password for multiple accounts.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Si hackean una, ¡acceden a todas!</span>
+                            <span class="lang-en">If one is hacked, all are compromised!</span>
+                        </p>
+                    </div>
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO desactivar o evitar la autenticación multifactor (MFA).</span>
+                            <span class="lang-en">DO NOT disable or avoid multi-factor authentication (MFA).</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Sin MFA, tu cuenta queda expuesta si tu contraseña es robada.</span>
+                            <span class="lang-en">Without MFA, your account is exposed if your password is stolen.</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/16.png" alt="Password Do Nots">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-16">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">❌ "Do Nots": Redes y Dispositivos</span>
+                        <span class="lang-en">❌ "Do Nots": Networks & Devices</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h3>
+                    <span class="lang-es">🌐 Seguridad en Redes (Networks) y Dispositivos (Devices)</span>
+                    <span class="lang-en">🌐 Network and Device Security</span>
+                </h3>
+                <div class="no-no-grid">
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO conectarse a WiFi público sin usar VPN.</span>
+                            <span class="lang-en">DO NOT connect to public Wi-Fi without using a VPN.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">En redes abiertas, cualquiera puede espiar tu información.</span>
+                            <span class="lang-en">On open networks, anyone can spy on your information.</span>
+                        </p>
+                    </div>
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO omitir actualizaciones (updates) de software y dispositivos.</span>
+                            <span class="lang-en">DO NOT skip software and device updates.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Las actualizaciones corrigen fallos de seguridad (security flaws).</span>
+                            <span class="lang-en">Updates fix security flaws.</span>
+                        </p>
+                    </div>
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO dejar la pantalla desbloqueada (unlocked) cuando te alejas.</span>
+                            <span class="lang-en">DO NOT leave your screen unlocked when you step away.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Alguien podría ver o robar tu información.</span>
+                            <span class="lang-en">Someone could see or steal your information.</span>
+                        </p>
+                    </div>
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO descargar software de fuentes no confiables (untrusted sources).</span>
+                            <span class="lang-en">DO NOT download software from untrusted sources.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Esto puede instalar virus o malware en tu dispositivo.</span>
+                            <span class="lang-en">This can install viruses or malware on your device.</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/17.png" alt="Network and Device Do Nots">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-17">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">❌ "Do Nots": Conciencia y Reporte (Reporting)</span>
+                        <span class="lang-en">❌ "Do Nots": Awareness & Reporting</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h3>
+                    <span class="lang-es">📧 Conciencia (Awareness) y Reporte (Reporting)</span>
+                    <span class="lang-en">📧 Awareness and Reporting</span>
+                </h3>
+                <div class="no-no-grid">
+                     <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO hacer clic en enlaces (links) sospechosos sin verificar.</span>
+                            <span class="lang-en">DO NOT click on suspicious links without verifying.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Revisa siempre el remitente (sender) antes de abrir.</span>
+                            <span class="lang-en">Always check the sender before opening.</span>
+                        </p>
+                    </div>
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO compartir demasiada información sin validar a la persona.</span>
+                            <span class="lang-en">DO NOT share too much information without validating the person.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Esto facilita ataques personalizados (targeted attacks).</span>
+                            <span class="lang-en">This facilitates targeted attacks.</span>
+                        </p>
+                    </div>
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO dejar de reportar incidentes de seguridad a tiempo.</span>
+                            <span class="lang-en">DO NOT fail to report security incidents in a timely manner.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Cuanto antes se detecte, menor será el daño (damage).</span>
+                            <span class="lang-en">The sooner it's detected, the less the damage.</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/18.png" alt="Awareness and Reporting Do Nots">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-18">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🚨 7. Respuesta a Incidentes (Incident Response)</span>
+                        <span class="lang-en">🚨 7. Incident Response</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">¿Qué hacer si detectamos una amenaza o algo sospechoso?</span>
+                    <span class="lang-en">What to do if we detect a threat or something suspicious?</span>
+                </h2>
+                <p>
+                    <span class="lang-es"><strong>¡Actúa Rápido!</strong></span>
+                    <span class="lang-en"><strong>Act Fast!</strong></span>
+                </p>
+                <div class="content-box">
+                    <h3>
+                        <span class="lang-es">Contacto Inmediato:</span>
+                        <span class="lang-en">Immediate Contact:</span>
+                    </h3>
+                    <p>
+                        <span class="lang-es">En caso de incidentes, contactar de inmediato al equipo de <strong>Seguridad de la Información (Information Security Team)</strong> a través del correo <strong>infosec@dominiodelaempresa.com</strong> o mediante la extensión interna <strong>XXXX</strong> (actualiza con información genérica).</span>
+                        <span class="lang-en">In case of incidents, immediately contact the <strong>Information Security Team</strong> via email at <strong>infosec@companydomain.com</strong> or through internal extension <strong>XXXX</strong> (update with generic info).</span>
+                    </p>
+                    <p>
+                        <span class="lang-es">Informa también a tu <strong>supervisor directo</strong> si es necesario.</span>
+                        <span class="lang-en">Also, inform your <strong>direct supervisor</strong> if necessary.</span>
+                    </p>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/19.png" alt="Incident Response Protocol">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-19">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">📢 Cómo Responder Ante Amenazas</span>
+                        <span class="lang-en">📢 How to Respond to Threats</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h3>
+                    <span class="lang-es">Acciones Clave (Key Actions):</span>
+                    <span class="lang-en">Key Actions:</span>
+                </h3>
+                <ul>
+                    <li>
+                        <span class="lang-es">Reportar correos sospechosos (suspicious emails).</span>
+                        <span class="lang-en">Report suspicious emails.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Cambiar contraseñas (passwords) en caso de actividad inusual.</span>
+                        <span class="lang-en">Change passwords in case of unusual activity.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Reportar dispositivos perdidos o robados (lost or stolen devices).</span>
+                        <span class="lang-en">Report lost or stolen devices.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">No compartir información personal en llamadas sospechosas.</span>
+                        <span class="lang-en">Do not share personal information in suspicious calls.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Si recibes un correo sospechoso: No hagas clic.</span>
+                        <span class="lang-en">If you receive a suspicious email: Do not click.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Si notas actividad inusual en tu cuenta: Cambia la contraseña y activa MFA.</span>
+                        <span class="lang-en">If you notice unusual activity in your account: Change your password and enable MFA.</span>
+                    </li>
+                </ul>
+                <div class="regulation-card">
+                    <h3>
+                        <span class="lang-es">Ejemplo Real:</span>
+                        <span class="lang-en">Real Example:</span>
+                    </h3>
+                    <p>
+                        <span class="lang-es">Un empleado notó que su cuenta estaba enviando correos sin su autorización.</span>
+                        <span class="lang-en">An employee noticed their account was sending emails without their authorization.</span>
+                    </p>
+                    <p>
+                        <span class="lang-es"><strong>En lugar de ignorarlo, lo reportó de inmediato y evitó un ataque mayor.</strong></span>
+                        <span class="lang-en"><strong>Instead of ignoring it, they reported it immediately and prevented a major attack.</strong></span>
+                    </p>
+                </div>
+                <p>
+                    <span class="lang-es">👉 Si vemos algo sospechoso, debemos actuar rápido. La seguridad es responsabilidad de todos.</span>
+                    <span class="lang-en">👉 If we see something suspicious, we must act quickly. Security is everyone's responsibility.</span>
+                </p>
+                <div class="image-placeholder">
+                    <img src="img/20.png" alt="Responding to Cyber Threats">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-20">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">💬 Reflexión Final y Preguntas</span>
+                        <span class="lang-en">💬 Final Thoughts & Questions</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content" style="text-align: center;">
+                 <div class="image-placeholder">
+                    <img src="img/21.png" alt="Final Thoughts on Cybersecurity">
+                </div>
+                <h2>
+                    <span class="lang-es">La Seguridad es Responsabilidad de Todos</span>
+                    <span class="lang-en">Security is Everyone's Responsibility</span>
+                </h2>
+                <p style="font-size: 1.2em; color: #555; margin: 20px 0;">
+                    <span class="lang-es">"Cuidar la información de las personas que confían en nosotros ayuda a evitar situaciones difíciles y fortalece la confianza. La seguridad digital es una parte importante de nuestro servicio."</span>
+                    <span class="lang-en">"Protecting the information of those who trust us helps avoid difficult situations and strengthens confidence. Digital security is an important part of our service."</span>
+                </p>
+                <p>
+                    <span class="lang-es">Si vemos algo sospechoso, debemos actuar rápido.</span>
+                    <span class="lang-en">If we see something suspicious, we must act fast.</span>
+                </p>
+                <div class="content-box" style="margin-top: 30px;">
+                    <h3>
+                        <span class="lang-es">¿Preguntas?</span>
+                        <span class="lang-en">Questions?</span>
+                    </h3>
+                    <p>
+                        <span class="lang-es">Este es el momento de aclarar cualquier duda que tengas sobre ciberseguridad.</span>
+                        <span class="lang-en">This is the time to clarify any doubts you may have about cybersecurity.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    <div class="slide-indicator" id="slideIndicatorContainer">
+        </div>
+
+    <div class="controls">
+        <button class="control-btn" id="prevBtn">
+            <span class="lang-es">⬅️ Anterior</span>
+            <span class="lang-en">⬅️ Previous</span>
+        </button>
+        <button class="control-btn" id="nextBtn">
+            <span class="lang-es">Siguiente ➡️</span>
+            <span class="lang-en">Next ➡️</span>
+        </button>
+    </div>
+
+    <button id="languageToggleBtn">
+        <span class="lang-es-btn-text">Switch to English</span>
+        <span class="lang-en-btn-text" style="display:none;">Cambiar a Español</span>
+    </button>
+    <button id="fullscreenToggleBtn" title="Pantalla Completa">
+        <span class="lang-es">🖥️ Completa</span>
+        <span class="lang-en" style="display:none;">🖥️ Fullscreen</span>
+    </button>
+
+
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide-container .slide');
+        const totalSlides = slides.length;
+        const slideIndicatorContainer = document.getElementById('slideIndicatorContainer');
+        const prevButton = document.getElementById('prevBtn');
+        const nextButton = document.getElementById('nextBtn');
+        const languageToggleBtn = document.getElementById('languageToggleBtn');
+        const fullscreenToggleBtn = document.getElementById('fullscreenToggleBtn');
+        let currentLanguage = 'es'; // 'es' para español, 'en' para inglés
+
+        const slideTimes = [ 
+            30, 60, 60, 150, 150, 60, 180, 240, 210, 210, 
+            60, 60, 60, 60, 60, 40, 40, 40, 60, 60, 120 
+        ];
+        let currentTimerInterval;
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+            return `${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        function startSlideTimer(slideIndex) {
+            clearInterval(currentTimerInterval); 
+
+            const timerElement = slides[slideIndex].querySelector('.slide-header .slide-timer');
+            if (!timerElement) return;
+
+            let timeLeft = slideTimes[slideIndex] || 0; 
+            timerElement.textContent = formatTime(timeLeft);
+
+            if (slideTimes[slideIndex] === 0) {
+                timerElement.textContent = "--:--";
+                return;
+            }
+            if (timeLeft <= 0) {
+                 timerElement.textContent = (currentLanguage === 'es') ? "Tiempo agotado" : "Time's up";
+                 return;
+            }
+
+            currentTimerInterval = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = formatTime(timeLeft);
+                if (timeLeft <= 0) {
+                    clearInterval(currentTimerInterval);
+                    timerElement.textContent = (currentLanguage === 'es') ? "Tiempo agotado" : "Time's up";
+                }
+            }, 1000);
+        }
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.documentElement.lang = lang; 
+
+            document.querySelectorAll('.slide .lang-es').forEach(el => el.style.display = (lang === 'es' ? '' : 'none'));
+            document.querySelectorAll('.slide .lang-en').forEach(el => el.style.display = (lang === 'en' ? '' : 'none'));
+            
+            updateNavButtonsText();
+            updateLanguageToggleBtnText();
+            updateFullscreenButtonText();
+
+            const activeTimerElement = slides[currentSlideIndex].querySelector('.slide-header .slide-timer');
+            if (activeTimerElement && (activeTimerElement.textContent === "Tiempo agotado" || activeTimerElement.textContent === "Time's up")) {
+                activeTimerElement.textContent = (currentLanguage === 'es') ? "Tiempo agotado" : "Time's up";
+            } else if (activeTimerElement && slideTimes[currentSlideIndex] === 0) {
+                 activeTimerElement.textContent = "--:--";
+            }
+        }
+
+        function toggleLanguage() {
+            setLanguage(currentLanguage === 'es' ? 'en' : 'es');
+        }
+        
+        function updateNavButtonsText() {
+            if (!prevButton || !nextButton) return;
+            const prevTextEs = "⬅️ Anterior";
+            const prevTextEn = "⬅️ Previous";
+            const nextTextEs = "Siguiente ➡️";
+            const nextTextEn = "Next ➡️";
+            const finishTextEs = "🏁 Finalizar";
+            const finishTextEn = "🏁 Finish";
+            
+            prevButton.innerHTML = `<span class="lang-es">${prevTextEs}</span><span class="lang-en">${prevTextEn}</span>`;
+            
+            if (currentSlideIndex === totalSlides - 1) {
+                nextButton.innerHTML = `<span class="lang-es">${finishTextEs}</span><span class="lang-en">${finishTextEn}</span>`;
+            } else {
+                nextButton.innerHTML = `<span class="lang-es">${nextTextEs}</span><span class="lang-en">${nextTextEn}</span>`;
+            }
+
+            prevButton.querySelectorAll('.lang-es').forEach(el => el.style.display = (currentLanguage === 'es' ? '' : 'none'));
+            prevButton.querySelectorAll('.lang-en').forEach(el => el.style.display = (currentLanguage === 'en' ? '' : 'none'));
+            nextButton.querySelectorAll('.lang-es').forEach(el => el.style.display = (currentLanguage === 'es' ? '' : 'none'));
+            nextButton.querySelectorAll('.lang-en').forEach(el => el.style.display = (currentLanguage === 'en' ? '' : 'none'));
+        }
+        
+        function updateLanguageToggleBtnText() {
+            if (!languageToggleBtn) return;
+            const switchToEnText = "Switch to English";
+            const switchToEsText = "Cambiar a Español";
+
+            let esBtnSpan = languageToggleBtn.querySelector('.lang-es-btn-text');
+            let enBtnSpan = languageToggleBtn.querySelector('.lang-en-btn-text');
+
+            if (!esBtnSpan) {
+                esBtnSpan = document.createElement('span');
+                esBtnSpan.className = 'lang-es-btn-text';
+                languageToggleBtn.appendChild(esBtnSpan);
+            }
+            if (!enBtnSpan) {
+                enBtnSpan = document.createElement('span');
+                enBtnSpan.className = 'lang-en-btn-text';
+                languageToggleBtn.appendChild(enBtnSpan);
+            }
+            
+            esBtnSpan.textContent = switchToEnText;
+            enBtnSpan.textContent = switchToEsText;
+
+            esBtnSpan.style.display = (currentLanguage === 'es' ? '' : 'none');
+            enBtnSpan.style.display = (currentLanguage === 'en' ? '' : 'none');
+        }
+        
+        function getFullscreenElement() {
+            return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+        }
+
+        function toggleFullscreen() {
+            if (!getFullscreenElement()) {
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+                    document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) { /* Firefox */
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.msRequestFullscreen) { /* IE/Edge */
+                    document.documentElement.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { /* Safari */
+                    document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) { /* Firefox */
+                    document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) { /* IE/Edge */
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        function updateFullscreenButtonText() {
+            if (!fullscreenToggleBtn) return;
+            const btnEsText = getFullscreenElement() ? "🖥️ Salir Completa" : "🖥️ Completa";
+            const btnEnText = getFullscreenElement() ? "🖥️ Exit Full" : "🖥️ Fullscreen";
+            
+            let esSpan = fullscreenToggleBtn.querySelector('.lang-es');
+            let enSpan = fullscreenToggleBtn.querySelector('.lang-en');
+
+            if(!esSpan){
+                esSpan = document.createElement('span');
+                esSpan.className = 'lang-es';
+                fullscreenToggleBtn.appendChild(esSpan);
+            }
+             if(!enSpan){
+                enSpan = document.createElement('span');
+                enSpan.className = 'lang-en';
+                fullscreenToggleBtn.appendChild(enSpan);
+            }
+            
+            esSpan.textContent = btnEsText;
+            enSpan.textContent = btnEnText;
+            
+            esSpan.style.display = (currentLanguage === 'es' ? '' : 'none');
+            enSpan.style.display = (currentLanguage === 'en' ? '' : 'none');
+        }
+
+
+        function createDots() {
+            if (!slideIndicatorContainer) return;
+            slideIndicatorContainer.innerHTML = ''; 
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                dot.addEventListener('click', () => goToSlide(i));
+                slideIndicatorContainer.appendChild(dot);
+            }
+        }
+
+        function updateDots() {
+            if (!slideIndicatorContainer) return;
+            const dots = slideIndicatorContainer.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                if (index === currentSlideIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+        
+        function updateSlideNumbers() {
+            slides.forEach((slide, index) => {
+                const slideNumberElement = slide.querySelector('.slide-header .slide-number');
+                if (slideNumberElement) {
+                    slideNumberElement.textContent = `${index + 1}/${totalSlides}`;
+                }
+            });
+        }
+
+        function showSlide(index) {
+            if (index >= totalSlides || index < 0 || slides.length === 0) return;
+
+            clearInterval(currentTimerInterval); 
+
+            slides.forEach((slide) => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+            currentSlideIndex = index;
+            
+            startSlideTimer(currentSlideIndex); 
+
+            updateDots();
+            updateNavButtonsStatus();
+            updateNavButtonsText(); 
+            updateFullscreenButtonText(); // Actualizar al cambiar slide también
+            
+            slides[index].querySelectorAll('.lang-es').forEach(el => el.style.display = (currentLanguage === 'es' ? '' : 'none'));
+            slides[index].querySelectorAll('.lang-en').forEach(el => el.style.display = (currentLanguage === 'en' ? '' : 'none'));
+        }
+
+        function updateNavButtonsStatus() { 
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlideIndex === 0;
+            nextButton.disabled = currentSlideIndex === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < totalSlides - 1) {
+                showSlide(currentSlideIndex + 1);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlideIndex > 0) {
+                showSlide(currentSlideIndex - 1);
+            }
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+        }
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', previousSlide);
+            nextButton.addEventListener('click', nextSlide);
+        }
+        if (languageToggleBtn) {
+            languageToggleBtn.addEventListener('click', toggleLanguage);
+        }
+         if (fullscreenToggleBtn) {
+            fullscreenToggleBtn.addEventListener('click', toggleFullscreen);
+            document.addEventListener('fullscreenchange', updateFullscreenButtonText);
+            document.addEventListener('webkitfullscreenchange', updateFullscreenButtonText);
+            document.addEventListener('mozfullscreenchange', updateFullscreenButtonText);
+            document.addEventListener('MSFullscreenChange', updateFullscreenButtonText);
+        }
+
+
+        document.addEventListener('keydown', function(e) {
+            if (slides.length === 0) return; 
+
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') { 
+                    nextSlide();
+                    e.preventDefault(); 
+                }
+            } else if (e.key === 'ArrowLeft') {
+                 if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                    previousSlide();
+                    e.preventDefault();
+                }
+            } else if (e.key >= '1' && e.key <= '9') {
+                 if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                    const slideNum = parseInt(e.key) - 1;
+                    if (slideNum < totalSlides && slideNum >= 0 && slideNum < 9) { 
+                        goToSlide(slideNum);
+                    }
+                }
+            }
+        });
+        
+        function initSlideshow() {
+            if (totalSlides > 0) {
+                createDots();
+                updateSlideNumbers(); 
+                setLanguage('es'); 
+                showSlide(0); 
+            } else {
+                if(slideIndicatorContainer) slideIndicatorContainer.style.display = 'none';
+                if(prevButton) prevButton.style.display = 'none';
+                if(nextButton) nextButton.style.display = 'none';
+                if(languageToggleBtn) languageToggleBtn.style.display = 'none';
+                if(fullscreenToggleBtn) fullscreenToggleBtn.style.display = 'none';
+                console.warn("No slides found to initialize slideshow.");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initSlideshow);
+    </script>
+</body>
+</html>
