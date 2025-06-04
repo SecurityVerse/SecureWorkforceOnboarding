@@ -1,0 +1,2237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding en Ciberseguridad - Grupo Cooperativo Seguros Multiples</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px; /* Base font size */
+        }
+
+        .slide-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide {
+            width: 90%;
+            max-width: 1100px; 
+            height: 90%;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 25px; 
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35); 
+            padding: 40px;
+            padding-bottom: 80px; 
+            display: none;
+            overflow-y: auto;
+            color: #333;
+            backdrop-filter: blur(12px); 
+            position: absolute;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            z-index: 10;
+        }
+
+        .slide-header {
+            background: linear-gradient(135deg, #5e72e4 0%, #825ee4 100%); 
+            margin: -40px -40px 30px -40px;
+            padding: 30px 40px; 
+            border-radius: 25px 25px 0 0;
+            color: white;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .slide-header .title-block {
+            flex-grow: 1;
+        }
+
+        .slide-header h1 {
+            font-size: 2.4em; 
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .slide-header .subtitle {
+            font-size: 1.2em; 
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+        
+        .slide-progress-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            line-height: 1.3;
+            margin-left: 15px;
+        }
+
+        .slide-header .slide-timer {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 4px;
+            background-color: rgba(0,0,0,0.15);
+            padding: 3px 8px;
+            border-radius: 10px;
+        }
+
+        .slide-header .slide-number {
+            font-size: 0.95em;
+            color: white;
+            background-color: rgba(255, 255, 255, 0.25);
+            padding: 4px 12px;
+            border-radius: 15px;
+        }
+
+        .slide-content {
+             padding-top: 15px; 
+        }
+
+        .slide-content h2 {
+            font-size: 1.8em; 
+            color: #343a40; 
+            margin-bottom: 20px; 
+            border-bottom: 3px solid #5e72e4; 
+            padding-bottom: 10px;
+        }
+
+        .slide-content h3 {
+            font-size: 1.4em; 
+            color: #d9534f; 
+            margin: 25px 0 10px 0; 
+        }
+        
+        .slide-content p, .slide-content li {
+            font-size: 1.05em; 
+            line-height: 1.7; 
+            margin-bottom: 12px; 
+            color: #495057; 
+        }
+
+        .slide-content ul, .slide-content ol {
+            list-style-position: outside;
+            padding-left: 30px; 
+        }
+        .slide-content ul li, .slide-content ol li {
+            margin-bottom: 10px;
+        }
+        .slide-content strong {
+            color: #2c3e50; 
+        }
+        .slide-content code {
+            background-color: #e9ecef; 
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+            color: #c7254e; 
+        }
+        
+        .example-box {
+            background: #f8f9fa; 
+            border: 1px solid #dee2e6;
+            padding: 20px; 
+            margin: 20px 0; 
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.07);
+        }
+        .example-box h4 {
+            color: #007bff; 
+            margin-top: 0;
+            margin-bottom: 10px; 
+            font-size: 1.2em; 
+        }
+        .example-box p {
+            color: #495057; 
+            font-size: 1em; 
+            line-height: 1.6; 
+            margin-bottom: 10px;
+        }
+        .fake-link-container {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 8px;
+        }
+        .fake-link {
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .fake-link-container .hover-text {
+            font-size: 0.95em;
+            color: #c0392b;
+            display: block; 
+            margin-top: 8px;
+            font-style: italic;
+        }
+        .fake-link:hover {
+            color: #e74c3c;
+        }
+
+        .content-box { 
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffb8b8 100%); 
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            margin: 30px 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+         .content-box h3, .content-box p, .content-box li {
+            color: white !important;
+         }
+         .content-box h3 {
+             margin-top: 0;
+             font-size: 1.4em; 
+         }
+         .content-box strong {
+             color: white !important;
+             font-weight: 600;
+         }
+
+        .regulation-card { 
+            background: linear-gradient(135deg, #20c997 0%, #92e6a7 100%); 
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .regulation-card h3, .regulation-card p, .regulation-card li {
+            color: white !important;
+        }
+        .regulation-card h3 {
+            margin-top: 0;
+            font-size: 1.4em; 
+        }
+        .regulation-card strong {
+             color: white !important;
+             font-weight: 600;
+        }
+
+        .content-box:hover, .regulation-card:hover {
+            transform: translateY(-6px); 
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.22); 
+        }
+        
+        .image-placeholder {
+            width: 100%;
+            max-width: 450px; 
+            margin: 25px auto;
+            padding:15px;
+            background: rgba(0,0,0,0.04);
+            border-radius: 12px;
+            text-align: center;
+        }
+        .image-placeholder img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block; 
+            margin: 0 auto;
+        }
+        .image-placeholder p { 
+            font-size: 0.95em; 
+            color: #555;
+            margin-top:8px;
+        }
+
+        .no-no-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 20px; 
+            margin-top: 25px;
+        }
+        .no-no-item {
+            background: rgba(231, 76, 60, 0.08); 
+            border-left: 6px solid #e74c3c; 
+            padding: 20px; 
+            border-radius: 10px;
+        }
+        .no-no-item h4 {
+            color: #c0392b; 
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1.2em; 
+        }
+        .no-no-item p {
+            font-size: 1em; 
+            color: #555;
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+
+        .slide-indicator {
+            position: fixed;
+            top: 50%;
+            right: 25px; 
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px; 
+            z-index: 1000;
+        }
+
+        .dot {
+            width: 12px; 
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5); 
+            border: 1px solid rgba(0,0,0,0.1); 
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: white;
+            transform: scale(1.4); 
+            box-shadow: 0 0 8px rgba(255,255,255,0.5);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 25px; 
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center; 
+            gap: 15px; 
+            z-index: 1000;
+            padding: 8px 15px; 
+            background-color: rgba(0,0,0,0.2); 
+            border-radius: 30px;
+        }
+
+        .control-btn {
+            background: linear-gradient(145deg, #007bff 0%, #0056b3 100%); 
+            border: none;
+            color: #ffffff; 
+            padding: 10px 20px; 
+            border-radius: 25px; 
+            cursor: pointer;
+            font-size: 15px; 
+            font-weight: 600; 
+            transition: all 0.25s ease-out;
+            box-shadow: 0 4px 10px rgba(0, 86, 179, 0.25);
+            text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+            white-space: nowrap; 
+        }
+
+        .control-btn:hover {
+            background: linear-gradient(145deg, #0056b3 0%, #003f80 100%); 
+            color: #fff; 
+            transform: translateY(-2px) scale(1.02); 
+             box-shadow: 0 6px 15px rgba(0, 63, 128, 0.35);
+        }
+
+        .control-btn:disabled {
+            background: linear-gradient(135deg, #adb5bd 0%, #6c757d 100%); 
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: translateY(0) scale(1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #languageToggleBtn, #fullscreenToggleBtn {
+            position: fixed;
+            bottom: 25px; 
+            border: none;
+            color: white;
+            padding: 10px 15px; 
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px; 
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            z-index: 1001;
+            transition: all 0.25s ease-out;
+        }
+        #languageToggleBtn:hover, #fullscreenToggleBtn:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+
+        #languageToggleBtn {
+            right: 25px; 
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); 
+        }
+        
+        #fullscreenToggleBtn {
+            right: 200px; 
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%); 
+        }
+
+        .audio-controls { 
+            margin: 15px auto; 
+            display: block; 
+            width: auto; 
+            max-width: 400px; 
+        }
+        
+        #slide1CustomAudioControls { /* Contenedor para los botones de audio en la barra .controls */
+            display: none; /* Oculto por defecto, se muestra con JS cuando Slide 1 está activo */
+            align-items: center;
+            gap: 8px; 
+        }
+        .audio-custom-btn { /* Estilo para los botones Play/Pausa, Rewind, Forward */
+            margin: 0 2px; 
+            padding: 8px 10px; 
+            font-size: 13px; /* Más pequeños para la barra */
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            line-height: 1; /* Para mejor alineación vertical del texto/icono */
+        }
+        .audio-custom-btn:hover {
+            background-color: rgba(255,255,255,0.4);
+        }
+        #slide1CustomAudioControls .audio-time-display { 
+            font-size: 0.8em; /* Más pequeño */
+            color: #e0e0e0; /* Color más suave */
+            margin-left: 5px;
+            min-width: 65px; 
+            text-align: right;
+            padding: 0 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="slide-container">
+        <div class="slide active" id="slide-0">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🔐 Onboarding en Ciberseguridad</span>
+                        <span class="lang-en">🔐 Cybersecurity Onboarding</span>
+                    </h1>
+                    <p class="subtitle">
+                        <span class="lang-es">Guía para Nuevos Empleados en Grupo Cooperativo Seguros Multiples</span>
+                        <span class="lang-en">A Guide for New Employees at Protected Insurance Inc.</span>
+                    </p>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content" style="text-align: center; margin-top: 40px;">
+                
+                <div class="image-placeholder">
+                    <img src="img/1.png" alt="Cybersecurity Onboarding Welcome">
+                </div>
+
+                <div style="margin-top: 25px; margin-bottom: 25px;">
+                    <audio id="entryAudioControls" controls class="audio-controls">
+                        <source src="audio/entrada.mp3" type="audio/mpeg"> 
+                        <source src="audio/entrada.wav" type="audio/wav">   
+                        <span class="lang-es">Tu navegador no soporta el elemento de audio.</span>
+                        <span class="lang-en">Your browser does not support the audio element.</span>
+                    </audio>
+                </div>
+                
+                <h2>
+                    <span class="lang-es">¡Bienvenidos a Grupo Cooperativo Seguros Multiples!</span>
+                    <span class="lang-en">Welcome to Protected Insurance Inc.!</span>
+                </h2>
+                <p style="font-size: 1.25em; color: #555; margin: 20px 0;">
+                    <span class="lang-es">Hoy hablaremos sobre un tema clave para nuestro trabajo diario y la confianza de nuestros clientes: la ciberseguridad.</span>
+                    <span class="lang-en">Today we'll discuss a key topic for our daily work and our clients' trust: cybersecurity.</span>
+                </p>
+                <div class="content-box" style="margin-top: 30px;">
+                    <h3>
+                        <span class="lang-es">En un entorno cada vez más digitalizado, y manejando información sensible de pólizas y clientes, protegerla es responsabilidad de todos.</span>
+                        <span class="lang-en">In an increasingly digital environment, and handling sensitive policy and client information, protecting it is everyone's responsibility.</span>
+                    </h3>
+                    <p>
+                        <span class="lang-es">Este entrenamiento está diseñado para proporcionarles los conocimientos básicos para identificar y enfrentar amenazas comunes, y aplicar buenas prácticas que salvaguarden los activos de Grupo Cooperativo Seguros Multiples y la información de nuestros asegurados.</span>
+                        <span class="lang-en">This training is designed to provide you with the basic knowledge needed to identify and address common threats, and to apply best practices that safeguard Protected Insurance Inc.'s assets and our policyholders' information.</span>
+                    </p>
+                </div>
+                <p style="margin-top: 25px; font-size: 0.9em; color: #999;">
+                     <span class="lang-es">Uso Interno Solamente</span>
+                     <span class="lang-en">Internal Use Only</span>
+                 </p>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-1">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🎯 Objetivo del Entrenamiento</span>
+                        <span class="lang-en">🎯 Training Objective</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <audio id="slide1Audio" style="display: none;"> 
+                    <source src="audio/resumen_curso.mp3" type="audio/mpeg">
+                    <source src="audio/resumen_curso.wav" type="audio/wav">
+                    <span class="lang-es">Audio no disponible.</span>
+                    <span class="lang-en">Audio not available.</span>
+                </audio>
+
+                <p>
+                    <span class="lang-es">Brindar a los empleados de nuevo ingreso conocimientos básicos de ciberseguridad, ofreciendo una visión clara sobre:</span>
+                    <span class="lang-en">To provide new employees with foundational cybersecurity knowledge, offering a clear understanding of:</span>
+                </p>
+                <ul>
+                    <li>
+                        <span class="lang-es">La importancia de la ciberseguridad en el sector asegurador y en Grupo Cooperativo Seguros Multiples</span>
+                        <span class="lang-en">The importance of cybersecurity in the insurance sector and at Protected Insurance Inc.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Las amenazas comunes a las que estamos expuestos (common threats), con ejemplos específicos de la industria.</span>
+                        <span class="lang-en">Common threats we are exposed to, with industry-specific examples.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Buenas prácticas (best practices) para proteger la información de nuestros clientes y de la empresa en el día a día.</span>
+                        <span class="lang-en">Best practices for protecting our clients' and company's information daily.</span>
+                    </li>
+                </ul>
+                <p>
+                    <span class="lang-es">Al finalizar, serás capaz de reconocer riesgos (risks) y aplicar medidas preventivas efectivas para proteger datos sensibles como números de póliza, información personal identificable (PII) y datos financieros de los clientes.</span>
+                    <span class="lang-en">By the end, you will be able to recognize risks and apply effective preventative measures to protect sensitive data like policy numbers, personally identifiable information (PII), and clients' financial data.</span>
+                </p>
+                <div class="example-box">
+                    <h4>
+                        <span class="lang-es">Ejemplo Práctico:</span>
+                        <span class="lang-en">Practical Example:</span>
+                    </h4>
+                    <p>
+                        <span class="lang-es"><strong>Escenario:</strong> Un nuevo ajustador de siniestros recibe un correo sospechoso. <strong>Objetivo del training:</strong> Que sepa identificarlo como phishing y no haga clic en enlaces maliciosos, evitando así una posible brecha de datos.</span>
+                        <span class="lang-en"><strong>Scenario:</strong> A new claims adjuster receives a suspicious email. <strong>Training Objective:</strong> To enable them to identify it as phishing and not click on malicious links, thus preventing a potential data breach.</span>
+                    </p>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/2.png" alt="Training Objective Illustration">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-2">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🗓️ Agenda (Tiempo total: 30 minutos)</span>
+                        <span class="lang-en">🗓️ Agenda (Total Time: 30 minutes)</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>Introducción a la Ciberseguridad (10 min):</strong> ¿Por qué es importante para Grupo Cooperativo Seguros Multiples y cómo nos afecta? Impacto de una brecha de datos en la confianza del cliente.</span>
+                        <span class="lang-en"><strong>Introduction to Cybersecurity (10 min):</strong> Why is it important for Protected Insurance Inc. and how does it affect us? Impact of a data breach on client trust.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Regulaciones Aplicables (3 min):</strong> Leyes de protección de datos (ej. HIPAA si aplica, leyes locales de privacidad) relevantes para el sector seguros.</span>
+                        <span class="lang-en"><strong>Applicable Regulations (3 min):</strong> Data protection laws (e.g., HIPAA if applicable, local privacy laws) relevant to the insurance sector.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Actores de Amenazas (Threat Actors) (4 min):</strong> Quiénes atacan a las aseguradoras y cómo operan (ej. robo de listas de clientes, fraude de seguros).</span>
+                        <span class="lang-en"><strong>Threat Actors (4 min):</strong> Who targets insurance companies and how do they operate (e.g., theft of client lists, insurance fraud).</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Amenazas Comunes y Ejemplos (7 min):</strong> Phishing, vishing, malware y ransomware dirigidos a empleados de seguros. <strong>¡Veremos un ejemplo interactivo!</strong></span>
+                        <span class="lang-en"><strong>Common Threats and Examples (7 min):</strong> Phishing, vishing, malware, and ransomware targeting insurance employees. <strong>We'll see an interactive example!</strong></span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Situaciones Comunes y Cómo Evitarlas (5 min):</strong> Contraseñas seguras, MFA, conexión segura (VPN) al manejar datos de pólizas fuera de la oficina.</span>
+                        <span class="lang-en"><strong>Common Situations and How to Avoid Them (5 min):</strong> Secure passwords, MFA, secure connection (VPN) when handling policy data outside the office.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Los "Do Nots" de la Ciberseguridad (2 min):</strong> Acciones que debemos evitar para proteger la información de los clientes y de la empresa.</span>
+                        <span class="lang-en"><strong>The Cybersecurity "Do Nots" (2 min):</strong> Actions to avoid to protect client and company information.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Respuesta a Incidentes (Incident Response) (2 min):</strong> Qué hacer si detectamos una amenaza o una posible brecha de datos de un asegurado.</span>
+                        <span class="lang-en"><strong>Incident Response (2 min):</strong> What to do if we detect a threat or a potential breach of policyholder data.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Reflexión Final y Preguntas (2 min):</strong> La seguridad es responsabilidad de todos en Grupo Cooperativo Seguros Multiples</span>
+                        <span class="lang-en"><strong>Final Thoughts and Questions (2 min):</strong> Security is everyone's responsibility at Protected Insurance Inc.</span>
+                    </li>
+                </ul>
+                <div class="image-placeholder">
+                    <img src="img/3.png" alt="Agenda Overview">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-3">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🛡️ 1. Introducción a la Ciberseguridad</span>
+                        <span class="lang-en">🛡️ 1. Introduction to Cybersecurity</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">¿Qué es la Ciberseguridad?</span>
+                    <span class="lang-en">What is Cybersecurity?</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Es el conjunto de prácticas, tecnologías y procesos diseñados para proteger sistemas, redes y datos (como la información personal de nuestros clientes y detalles de sus pólizas) de ataques digitales (digital attacks).</span>
+                    <span class="lang-en">It's the set of practices, technologies, and processes designed to protect systems, networks, and data (like our clients' personal information and policy details) from digital attacks.</span>
+                </p>
+                <h3>
+                    <span class="lang-es">Tres Principios Clave (Tríada CIA):</span>
+                    <span class="lang-en">Three Key Principles (CIA Triad):</span>
+                </h3>
+                 <div class="image-placeholder">
+                    <img src="img/4.png" alt="Tríada de la Ciberseguridad: Disponibilidad, Integridad, Confidencialidad">
+                    <p>
+                        <span class="lang-es">Diagrama de la Tríada CIA</span>
+                        <span class="lang-en">CIA Triad Diagram</span>
+                    </p>
+                </div>
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>Confidencialidad (Confidentiality):</strong> Garantizar que solo las personas autorizadas (ej. el agente asignado, el cliente) accedan a la información de la póliza. <em>Ejemplo: Evitar que un atacante acceda a los detalles médicos de un cliente en una póliza de salud.</em></span>
+                        <span class="lang-en"><strong>Confidentiality:</strong> Ensuring that only authorized individuals (e.g., the assigned agent, the client) access policy information. <em>Example: Preventing an attacker from accessing a client's medical details in a health insurance policy.</em></span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Integridad (Integrity):</strong> Mantener la exactitud y consistencia de la información. <em>Ejemplo: Asegurar que el monto de cobertura de una póliza no sea alterado fraudulentamente.</em></span>
+                        <span class="lang-en"><strong>Integrity:</strong> Maintaining the accuracy and consistency of information. <em>Example: Ensuring a policy's coverage amount is not fraudulently altered.</em></span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Disponibilidad (Availability):</strong> Asegurar que los datos y sistemas estén accesibles cuando sea necesario. <em>Ejemplo: Que nuestros sistemas de gestión de pólizas estén operativos para que los clientes puedan reportar un siniestro sin demoras.</em></span>
+                        <span class="lang-en"><strong>Availability:</strong> Ensuring that data and systems are accessible when needed. <em>Example: That our policy management systems are operational so clients can report a claim without delay.</em></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-4">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">❓ ¿Por qué es importante para nosotros en Grupo Cooperativo Seguros Multiples?</span>
+                        <span class="lang-en">❓ Why is Cybersecurity Important for Us at Protected Insurance Inc.?</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Manejo de Datos Sensibles (Sensitive Data) de Clientes</span>
+                    <span class="lang-en">Handling Clients' Sensitive Data</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Nuestro trabajo implica el manejo diario de información altamente confidencial: Nombres completos, direcciones, números de seguro social, información bancaria, historial de reclamaciones, detalles de salud (para pólizas de vida o salud). Esto nos convierte en un objetivo (target) muy atractivo para los ciberdelincuentes (cybercriminals).</span>
+                    <span class="lang-en">Our work involves daily handling of highly confidential information: Full names, addresses, social security numbers, banking information, claims history, health details (for life or health policies). This makes us a very attractive target for cybercriminals.</span>
+                </p>
+                <p>
+                    <span class="lang-es"><strong>Proteger esta información evita filtraciones (breaches) que podrían llevar a robo de identidad, fraude financiero para nuestros clientes, y mantiene la confianza (trust) que ellos depositan en Grupo Cooperativo Seguros Multiples</strong></span>
+                    <span class="lang-en"><strong>Protecting this information prevents breaches that could lead to identity theft, financial fraud for our clients, and maintains the trust they place in Protected Insurance Inc.</strong></span>
+                </p>
+
+                <h2>
+                    <span class="lang-es">Impacto Potencial de un Ataque Exitoso</span>
+                    <span class="lang-en">Potential Impact of a Successful Attack</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Un ataque a Grupo Cooperativo Seguros Multiples podría:</span>
+                    <span class="lang-en">An attack on Protected Insurance Inc. could:</span>
+                </p>
+                <ul>
+                    <li>
+                        <span class="lang-es">Interrumpir las operaciones: Imposibilidad de emitir pólizas, procesar reclamaciones o atender a clientes.</span>
+                        <span class="lang-en">Disrupt operations: Inability to issue policies, process claims, or serve clients.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Causar pérdidas económicas significativas: Costos de remediación, multas regulatorias, pago de fraudes.</span>
+                        <span class="lang-en">Cause significant financial losses: Remediation costs, regulatory fines, fraud payments.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Dañar la imagen y reputación de Grupo Cooperativo Seguros Multiples: Pérdida de confianza de clientes actuales y potenciales.</span>
+                        <span class="lang-en">Damage Protected Insurance Inc.'s image and reputation: Loss of trust from current and potential clients.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Consecuencias legales: Demandas por parte de clientes afectados por la brecha de datos.</span>
+                        <span class="lang-en">Legal consequences: Lawsuits from clients affected by the data breach.</span>
+                    </li>
+                </ul>
+                <div class="example-box">
+                    <h4>
+                        <span class="lang-es">Ejemplo de Impacto:</span>
+                        <span class="lang-en">Impact Example:</span>
+                    </h4>
+                    <p>
+                        <span class="lang-es">Si un ransomware cifra todos nuestros archivos de clientes, no podríamos verificar coberturas ni pagar siniestros, dejando a nuestros clientes en una situación vulnerable justo cuando más nos necesitan. La noticia de tal evento destruiría nuestra credibilidad.</span>
+                        <span class="lang-en">If ransomware encrypts all our client files, we wouldn't be able to verify coverages or pay claims, leaving our clients vulnerable when they need us most. News of such an event would destroy our credibility.</span>
+                    </p>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/5.png" alt="Impact of Cyber Attacks">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-5">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">⚠️ Ejemplos de Amenazas Comunes en el Sector Seguros</span>
+                        <span class="lang-en">⚠️ Examples of Common Threats in the Insurance Sector</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>Ingeniería Social (Social Engineering):</strong> Engañar a empleados para que divulguen datos como contraseñas (passwords) o información de clientes. <em>Ejemplo: Un atacante llama haciéndose pasar por un cliente molesto que necesita urgentemente detalles de su póliza, presionando al empleado para que omita pasos de verificación.</em></span>
+                        <span class="lang-en"><strong>Social Engineering:</strong> Deceiving employees into divulging data such as passwords or client information. <em>Example: An attacker calls pretending to be an upset client who urgently needs their policy details, pressuring the employee to skip verification steps.</em></span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Acceso No Autorizado (Unauthorized Access):</strong> Cuando alguien (interno o externo) consigue credenciales de acceso (access credentials) y entra a los sistemas de gestión de pólizas o bases de datos de clientes sin permiso. <em>Ejemplo: Un ex-empleado que aún conserva sus credenciales activas accede para copiar listas de clientes.</em></span>
+                        <span class="lang-en"><strong>Unauthorized Access:</strong> When someone (internal or external) obtains access credentials and enters policy management systems or client databases without permission. <em>Example: An ex-employee whose credentials are still active accesses to copy client lists.</em></span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Phishing y Spear Phishing:</strong> Correos fraudulentos que parecen legítimos, diseñados para robar credenciales o instalar malware. El Spear Phishing es más dirigido. <em>Ejemplo: Un correo que parece ser de un supervisor pidiendo al empleado que abra un "documento de reclamación urgente" adjunto, que en realidad es malware.</em></span>
+                        <span class="lang-en"><strong>Phishing and Spear Phishing:</strong> Fraudulent emails that appear legitimate, designed to steal credentials or install malware. Spear Phishing is more targeted. <em>Example: An email appearing to be from a supervisor asking the employee to open an attached "urgent claim document," which is actually malware.</em></span>
+                    </li>
+                </ul>
+                <p>
+                    <span class="lang-es">Estos son solo la punta del iceberg. Veremos más amenazas en detalle más adelante.</span>
+                    <span class="lang-en">These are just the tip of the iceberg. We'll explore more threats in detail later.</span>
+                </p>
+                <div class="image-placeholder">
+                    <img src="img/6.png" alt="Examples of Common Cyber Threats">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-6">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">📜 2. Regulaciones Aplicables en Seguros</span>
+                        <span class="lang-en">📜 2. Applicable Regulations in Insurance</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <div class="regulation-card">
+                    <h3>
+                        <span class="lang-es">🔒 Regulaciones de Protección de Datos Relevantes</span>
+                        <span class="lang-en">🔒 Relevant Data Protection Regulations</span>
+                    </h3>
+                    <p>
+                        <span class="lang-es">Como entidad aseguradora, manejamos grandes cantidades de Información Personal Identificable (PII) y datos financieros. Debemos adherirnos a estándares específicos para proteger esta información confidencial y aplicar controles de seguridad (security controls) mínimos para asegurar el cumplimiento (compliance) con leyes como [Mencionar leyes locales/nacionales relevantes, ej. Ley de Protección de Datos Personales, GDPR si aplica, HIPAA si se manejan datos de salud].</span>
+                        <span class="lang-en">As an insurance entity, we handle large amounts of Personally Identifiable Information (PII) and financial data. We must adhere to specific standards for protecting this confidential information and apply minimum security controls to ensure compliance with laws such as [Mention relevant local/national laws, e.g., Personal Data Protection Act, GDPR if applicable, HIPAA if health data is handled].</span>
+                    </p>
+                    <p>
+                        <span class="lang-es"><strong>✅ Beneficios:</strong> Cumplir con estas regulaciones ayuda a prevenir sanciones legales millonarias, fortalecer la confianza del cliente (saben que sus datos están seguros con Grupo Cooperativo Seguros Multiples) y demostrar el compromiso serio de la organización con la seguridad de la información.</span>
+                        <span class="lang-en"><strong>✅ Benefits:</strong> Compliance helps prevent hefty legal penalties, strengthens client confidence (they know their data is safe with Protected Insurance Inc.), and demonstrates our serious commitment to information security.</span>
+                    </p>
+                </div>
+                <div class="regulation-card">
+                    <h3>
+                        <span class="lang-es">💰 Normas de Privacidad y Datos Financieros</span>
+                        <span class="lang-en">💰 Privacy and Financial Data Rules</span>
+                    </h3>
+                    <p>
+                        <span class="lang-es">Existen normativas específicas que rigen la privacidad (privacy) de los datos personales y la información financiera de nuestros clientes y stakeholders (ej. PCI DSS si se procesan tarjetas de crédito directamente). Estas exigen medidas como el cifrado de datos, controles de acceso estrictos y auditorías regulares.</span>
+                        <span class="lang-en">Specific regulations govern the privacy of personal data and financial information of our clients and stakeholders (e.g., PCI DSS if credit cards are processed directly). These require measures such as data encryption, strict access controls, and regular audits.</span>
+                    </p>
+                    <p>
+                        <span class="lang-es"><strong>✅ Ejemplo y Beneficios:</strong> Implementar MFA para acceder a sistemas con datos de clientes no solo es una buena práctica, sino a menudo un requisito regulatorio. Esto refuerza nuestra imagen, mostrando que protegemos lo que nuestros clientes más valoran: su privacidad y seguridad financiera.</span>
+                        <span class="lang-en"><strong>✅ Example and Benefits:</strong> Implementing MFA to access systems with client data is not only a best practice but often a regulatory requirement. This enhances our image by showing we protect what our clients value most: their privacy and financial security.</span>
+                    </p>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/7.png" alt="Compliance and Regulations">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-7">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🕵️ 3. Actores de Amenazas (Threat Actors) y el Sector Asegurador</span>
+                        <span class="lang-en">🕵️ 3. Threat Actors & the Insurance Sector</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">¿Quiénes Están Detrás de los Ataques a las Aseguradoras?</span>
+                    <span class="lang-en">Who's Behind Attacks on Insurance Companies?</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Entender quiénes podrían atacarnos y por qué, nos ayuda a prepararnos mejor.</span>
+                    <span class="lang-en">Understanding who might attack us and why helps us prepare better.</span>
+                </p>
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>Hackers con Fines de Lucro:</strong> Buscan acceso no autorizado a nuestros sistemas para robar datos de clientes (PII, números de póliza, información financiera) y venderlos en la dark web, o cometer fraude de seguros.</span>
+                        <span class="lang-en"><strong>Profit-Motivated Hackers:</strong> Seek unauthorized access to our systems to steal client data (PII, policy numbers, financial information) and sell it on the dark web, or commit insurance fraud.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Grupos de Crimen Organizado:</strong> Realizan ataques sofisticados como ransomware, exigiendo grandes sumas para recuperar el acceso a nuestros sistemas de gestión de pólizas o bases de datos de siniestros.</span>
+                        <span class="lang-en"><strong>Organized Crime Groups:</strong> Conduct sophisticated attacks like ransomware, demanding large sums to regain access to our policy management systems or claims databases.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Insiders Maliciosos o Negligentes:</strong> Empleados o ex-empleados que intencionalmente o por descuido comprometen la seguridad de los datos (ej. un empleado descontento que filtra una lista de clientes a un competidor).</span>
+                        <span class="lang-en"><strong>Malicious or Negligent Insiders:</strong> Employees or ex-employees who intentionally or carelessly compromise data security (e.g., a disgruntled employee leaking a client list to a competitor).</span>
+                    </li>
+                     <li>
+                        <span class="lang-es"><strong>Hacktivistas:</strong> Aunque menos común en seguros, podrían atacar por razones ideológicas si perciben que la empresa tiene prácticas injustas.</span>
+                        <span class="lang-en"><strong>Hacktivists:</strong> Though less common in insurance, they might attack for ideological reasons if they perceive the company has unfair practices.</span>
+                    </li>
+                </ul>
+                <h2>
+                    <span class="lang-es">¿Cómo Operan? (Basado en el Framework MITRE ATT&CK)</span>
+                    <span class="lang-en">How They Operate (Based on MITRE ATT&CK Framework)</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Los atacantes suelen seguir una serie de pasos:</span>
+                    <span class="lang-en">Attackers often follow a series of steps:</span>
+                </p>
+                <ol>
+                    <li>
+                        <span class="lang-es"><strong>Reconocimiento (Reconnaissance):</strong> Investigan a Grupo Cooperativo Seguros Multiples, identificando empleados (ej. en LinkedIn), tecnologías que usamos, posibles vulnerabilidades.</span>
+                        <span class="lang-en"><strong>Reconnaissance:</strong> They research Protected Insurance Inc., identifying employees (e.g., on LinkedIn), technologies we use, potential vulnerabilities.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Acceso Inicial (Initial Access):</strong> Envían correos de phishing a nuestros empleados, explotan una vulnerabilidad en nuestro sitio web, o usan credenciales robadas. <em>Ejemplo: Un email a un agente con un adjunto malicioso que parece una "actualización de póliza".</em></span>
+                        <span class="lang-en"><strong>Initial Access:</strong> They send phishing emails to our employees, exploit a vulnerability on our website, or use stolen credentials. <em>Example: An email to an agent with a malicious attachment disguised as a "policy update."</em></span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Persistencia (Persistence):</strong> Una vez dentro, instalan herramientas para mantener el acceso incluso si reiniciamos sistemas o cambiamos contraseñas.</span>
+                        <span class="lang-en"><strong>Persistence:</strong> Once inside, they install tools to maintain access even if we reboot systems or change passwords.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Exfiltración de Datos (Data Exfiltration):</strong> Buscan y extraen la información valiosa: bases de datos de clientes, detalles financieros, estrategias comerciales. <em>Ejemplo: Copiar la base de datos completa de clientes con sus números de póliza e historial de reclamaciones.</em></span>
+                        <span class="lang-en"><strong>Data Exfiltration:</strong> They search for and extract valuable information: client databases, financial details, business strategies. <em>Example: Copying the entire client database with policy numbers and claims history.</em></span>
+                    </li>
+                     <li>
+                        <span class="lang-es"><strong>Impacto (Impact):</strong> Pueden cifrar nuestros datos (ransomware), interrumpir servicios, o amenazar con publicar los datos robados.</span>
+                        <span class="lang-en"><strong>Impact:</strong> They might encrypt our data (ransomware), disrupt services, or threaten to publish stolen data.</span>
+                    </li>
+                </ol>
+                <div class="image-placeholder">
+                    <img src="img/8.png" alt="Threat Actors and Criminal Organizations">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" id="slide-8">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🎣 4. Amenazas Comunes: Phishing y Vishing en Seguros</span>
+                        <span class="lang-en">🎣 4. Common Threats: Phishing & Vishing in Insurance</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Phishing (Correo) y Vishing (Voz/Llamada)</span>
+                    <span class="lang-en">Phishing (Email) and Vishing (Voice/Call)</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Qué son: Engaños por correo (phishing) o llamadas (vishing) para obtener acceso no autorizado a tus datos, como credenciales de inicio de sesión a nuestros sistemas de gestión de pólizas.</span>
+                    <span class="lang-en">What they are: Deceptive emails (phishing) or calls (vishing) to trick you into giving unauthorized access to your data, like login credentials to our policy management systems.</span>
+                </p>
+                <div class="example-box">
+                    <h4>
+                        <span class="lang-es">Ejemplo Detallado de Phishing: Acceso Falso a Microsoft O365</span>
+                        <span class="lang-en">Detailed Phishing Example: Fake Microsoft O365 Access</span>
+                    </h4>
+                    <p>
+                        <span class="lang-es">Recibes un correo que <strong>parece ser de Microsoft</strong>, alertando sobre "actividad inusual en tu cuenta de Grupo Cooperativo Seguros Multiples" e instándote a verificar tu identidad.</span>
+                        <span class="lang-en">You receive an email that <strong>appears to be from Microsoft</strong>, alerting about "unusual activity in your Protected Insurance Inc. account" and urging you to verify your identity.</span>
+                    </p>
+                    <div class="fake-link-container">
+                        <span class="lang-es">El correo dice: "Por favor, haz clic aquí para iniciar sesión: <span class="fake-link" onclick="window.open('https://fake-o365-login-page.com/auth', '_blank'); return false;">portal.segurosprotegidos.com/office365</span>"</span>
+                        <span class="lang-en">The email says: "Please click here to log in: <span class="fake-link" onclick="window.open('https://fake-o365-login-page.com/auth', '_blank'); return false;">portal.protectedinsurance.com/office365</span>"</span>
+                        <span class="hover-text">
+                            <span class="lang-es">¡Cuidado! Si pasas el mouse (sin hacer clic), podrías ver que el enlace real es algo como <code>http://malicious-site-example.com/microsoft</code>. Y si haces clic, te llevará a una página IDÉNTICA a la de Microsoft O365, pero es FALSA. Si ingresas tus datos, ¡los roban!</span>
+                            <span class="lang-en">Warning! If you hover over the link (without clicking), you might see the real link is something like <code>http://malicious-site-example.com/microsoft</code>. And if you click, it will take you to a page IDENTICAL to Microsoft O365, but it's FAKE. If you enter your credentials, they steal them!</span>
+                        </span>
+                    </div>
+                    <p>
+                        <span class="lang-es"><strong>Tabletop en vivo:</strong> Vamos a hacer clic (¡en un entorno seguro y simulado!) para que vean cómo se ve esta página falsa. Nunca ingresen sus credenciales reales aquí.</span>
+                        <span class="lang-en"><strong>Live Tabletop:</strong> We're going to click (in a safe, simulated environment!) so you can see what this fake page looks like. Never enter your real credentials here.</span>
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <h4>
+                        <span class="lang-es">Ejemplo Vishing: El "Departamento de Fraudes"</span>
+                        <span class="lang-en">Vishing Example: The "Fraud Department"</span>
+                    </h4>
+                    <p>
+                        <span class="lang-es">Recibes una llamada. La persona se identifica como "Juan Pérez del Departamento de Prevención de Fraudes de Grupo Cooperativo Seguros Multiples" Te informa que han detectado una transacción sospechosa en la póliza de un cliente importante y necesita que le confirmes el número de cuenta bancaria y los últimos dígitos de la tarjeta del cliente "para bloquear el fraude". Crean un sentido de urgencia.</span>
+                        <span class="lang-en">You receive a call. The person identifies themselves as "John Smith from Protected Insurance Inc.'s Fraud Prevention Department." They inform you they've detected a suspicious transaction on an important client's policy and need you to confirm the client's bank account number and last card digits "to block the fraud." They create a sense of urgency.</span>
+                    </p>
+                     <p>
+                        <span class="lang-es"><strong>Tabletop:</strong> ¿Qué harían? ¿Qué información NUNCA deben dar por teléfono sin una verificación exhaustiva? Recordar: Nosotros NUNCA pediremos datos completos de tarjetas o cuentas por teléfono de esta manera.</span>
+                        <span class="lang-en"><strong>Tabletop:</strong> What would you do? What information should you NEVER give over the phone without thorough verification? Remember: We will NEVER ask for full card or account details over the phone this way.</span>
+                    </p>
+                </div>
+                <h3>
+                    <span class="lang-es">Cómo Detectarlos:</span>
+                    <span class="lang-en">How to Spot Them:</span>
+                </h3>
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>Phishing:</strong> Remitentes desconocidos o con dominios ligeramente alterados (ej. <code>soporte@seguros-protegidos.co</code> en vez de <code>.com</code>). Enlaces que al pasar el mouse muestran una URL diferente. Gramática pobre, urgencia excesiva.</span>
+                        <span class="lang-en"><strong>Phishing:</strong> Unknown senders or slightly altered domains (e.g., <code>support@protected-insurance.co</code> instead of <code>.com</code>). Links that show a different URL on hover. Poor grammar, excessive urgency.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Vishing:</strong> Solicitudes inesperadas de información sensible. Presión para actuar inmediatamente. Negativa a proporcionar un número de devolución o verificar su identidad de otra manera.</span>
+                        <span class="lang-en"><strong>Vishing:</strong> Unexpected requests for sensitive information. Pressure to act immediately. Refusal to provide a callback number or verify their identity in another way.</span>
+                    </li>
+                </ul>
+                <div class="image-placeholder">
+                    <img src="img/9.png" alt="Phishing and Vishing Examples">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-9">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🦠 Amenazas Comunes: Malware y Ransomware en Seguros</span>
+                        <span class="lang-en">🦠 Common Threats: Malware & Ransomware in Insurance</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Malware (Software Malicioso)</span>
+                    <span class="lang-en">Malware (Malicious Software)</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Software diseñado para dañar sistemas, robar información (como datos de clientes, información de pólizas) o espiar la actividad del usuario. Se propaga a través de correos, descargas o sitios web infectados.</span>
+                    <span class="lang-en">Software designed to damage systems, steal information (like client data, policy information), or spy on user activity. It spreads through emails, downloads, or infected websites.</span>
+                </p>
+                <div class="example-box">
+                    <h4>
+                        <span class="lang-es">Ejemplo de Malware: Keylogger</span>
+                        <span class="lang-en">Malware Example: Keylogger</span>
+                    </h4>
+                    <p>
+                        <span class="lang-es">Un empleado descarga un "protector de pantalla gratuito" de un sitio no confiable. Este programa instala un keylogger, que registra todas las pulsaciones de teclas, incluyendo contraseñas de acceso a los sistemas de Grupo Cooperativo Seguros Multiples y datos de clientes que se estén ingresando. Esta información se envía secretamente al atacante.</span>
+                        <span class="lang-en">An employee downloads a "free screensaver" from an untrusted site. This program installs a keylogger, which records all keystrokes, including login passwords to Protected Insurance Inc. systems and client data being entered. This information is secretly sent to the attacker.</span>
+                    </p>
+                    <p>
+                        <span class="lang-es"><strong>Tabletop:</strong> ¿Cómo podría este keylogger afectar a un cliente si se captura la información de su nueva póliza de seguro de vida?</span>
+                        <span class="lang-en"><strong>Tabletop:</strong> How could this keylogger affect a client if their new life insurance policy information is captured?</span>
+                    </p>
+                </div>
+
+                <h2>
+                    <span class="lang-es">Ransomware</span>
+                    <span class="lang-en">Ransomware</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Un tipo de malware que cifra (bloquea) los archivos de la víctima (ej. todas las bases de datos de pólizas, documentos de siniestros). Los atacantes exigen un pago (ransom), usualmente en criptomonedas, para descifrarlos.</span>
+                    <span class="lang-en">A type of malware that encrypts (locks) the victim's files (e.g., all policy databases, claim documents). Attackers demand a ransom payment, usually in cryptocurrency, to decrypt them.</span>
+                </p>
+                <div class="example-box">
+                     <h4>
+                        <span class="lang-es">Ejemplo de Ransomware: Ataque a Servidor de Siniestros</span>
+                        <span class="lang-en">Ransomware Example: Attack on Claims Server</span>
+                    </h4>
+                    <p>
+                        <span class="lang-es">Un atacante logra infectar el servidor principal donde Grupo Cooperativo Seguros Multiples gestiona todos los siniestros. Todos los archivos son cifrados. Aparece un mensaje exigiendo $500,000 USD en Bitcoin para recuperar el acceso. Mientras tanto, no podemos procesar ningún siniestro, afectando a cientos de clientes que esperan sus pagos.</span>
+                        <span class="lang-en">An attacker manages to infect the main server where Protected Insurance Inc. manages all claims. All files are encrypted. A message appears demanding $500,000 USD in Bitcoin to regain access. Meanwhile, we cannot process any claims, affecting hundreds of clients awaiting their payments.</span>
+                    </p>
+                    <p>
+                        <span class="lang-es"><strong>Tabletop:</strong> ¿Cuáles serían las consecuencias inmediatas para nuestros clientes y para la reputación de la empresa? ¿Pagarían el rescate?</span>
+                        <span class="lang-en"><strong>Tabletop:</strong> What would be the immediate consequences for our clients and the company's reputation? Would you pay the ransom?</span>
+                    </p>
+                </div>
+                <h3>
+                    <span class="lang-es">Consejos Clave (Key Tips):</span>
+                    <span class="lang-en">Key Tips:</span>
+                </h3>
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>NO hacer clic</strong> en enlaces (links) o descargar adjuntos de correos sospechosos o no solicitados.</span>
+                        <span class="lang-en"><strong>DO NOT click</strong> on links or download attachments from suspicious or unsolicited emails.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Mantener el equipo y software (antivirus, sistema operativo) <strong>actualizado (updated)</strong>.</span>
+                        <span class="lang-en">Keep your devices and software (antivirus, operating system) <strong>updated</strong>.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Realizar copias de seguridad (backups) regulares de la información importante y guardarlas offline. (Esto es tarea de IT, pero es bueno saberlo).</span>
+                        <span class="lang-en">Perform regular backups of important information and store them offline. (This is IT's task, but good to know).</span>
+                    </li>
+                </ul>
+                <div class="image-placeholder">
+                    <img src="img/10.png" alt="Malware and Ransomware Illustrations">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-10">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🔑 5. Situaciones Comunes: Contraseñas Seguras (Secure Passwords)</span>
+                        <span class="lang-en">🔑 5. Common Situations: Secure Passwords</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Lo que NO se debe hacer:</span>
+                    <span class="lang-en">What NOT to do:</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Usar contraseñas fáciles como "Seguros2025", "123456", el nombre de la empresa, tu nombre, o fechas de nacimiento. NO repetirlas en varios sistemas (personales y de trabajo). NO escribirlas en post-its pegados al monitor.</span>
+                    <span class="lang-en">Using easy passwords like "Insurance2025", "123456", the company name, your name, or birth dates. DO NOT reuse them on multiple systems (personal and work). DO NOT write them on sticky notes attached to the monitor.</span>
+                </p>
+                 <div class="example-box">
+                    <h4>
+                        <span class="lang-es">Escenario: Contraseña Débil, Acceso Fácil</span>
+                        <span class="lang-en">Scenario: Weak Password, Easy Access</span>
+                    </h4>
+                    <p>
+                        <span class="lang-es">Un empleado usa <code>ClienteFeliz1!</code> como contraseña para acceder al CRM donde se guarda la información de todos los clientes. Esta contraseña, aunque tiene variedad, es predecible. Un atacante, usando técnicas de "password spraying" con contraseñas comunes en el sector seguros, podría adivinarla.</span>
+                        <span class="lang-en">An employee uses <code>HappyClient1!</code> as their password to access the CRM where all client information is stored. This password, though varied, is predictable. An attacker, using "password spraying" techniques with common passwords in the insurance sector, could guess it.</span>
+                    </p>
+                    <p>
+                        <span class="lang-es"><strong>Tabletop:</strong> Si el atacante accede, ¿qué tipo de información de nuestros clientes de Grupo Cooperativo Seguros Multiples estaría en riesgo? (Ej. Historial de pólizas, datos de contacto, reclamaciones pendientes).</span>
+                        <span class="lang-en"><strong>Tabletop:</strong> If the attacker gains access, what kind of information about our Protected Insurance Inc. clients would be at risk? (E.g., Policy history, contact details, pending claims).</span>
+                    </p>
+                </div>
+                <h2>
+                    <span class="lang-es">¿Cómo hacerlo bien? ✅</span>
+                    <span class="lang-en">How to do it right? ✅</span>
+                </h2>
+                <ul>
+                    <li>
+                        <span class="lang-es">Usa contraseñas <strong>largas</strong> (mínimo 12-15 caracteres) con mezcla de mayúsculas, minúsculas, números y símbolos (special characters). Ejemplo: <code>P0liz@S3gurA#2O25!</code></span>
+                        <span class="lang-en">Use <strong>long passwords</strong> (minimum 12-15 characters) with a mix of uppercase, lowercase, numbers, and special characters. Example: <code>S3cur3P0licY#2O25!</code></span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Evita usar información personal, nombres de mascotas, o palabras comunes de diccionario.</span>
+                        <span class="lang-en">Avoid using personal information, pet names, or common dictionary words.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Usa una contraseña <strong>única</strong> para cada sistema o cuenta importante.</span>
+                        <span class="lang-en">Use a <strong>unique</strong> password for each important system or account.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Considera usar un gestor de contraseñas (password manager) aprobado por la empresa para generar y guardar contraseñas complejas de forma segura.</span>
+                        <span class="lang-en">Consider using a company-approved password manager to generate and securely store complex passwords.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Cambia la contraseña inmediatamente si sospechas que ha sido comprometida (compromised).</span>
+                        <span class="lang-en">Change your password immediately if you suspect it has been compromised.</span>
+                    </li>
+                </ul>
+                <div class="content-box">
+                    <p>
+                        <span class="lang-es"><strong>Práctica:</strong> Piensen en una frase larga y fácil de recordar para ustedes, por ejemplo: "Mi primera póliza de auto fue con Seguros Protegidos en 2023!". Conviértanla en una contraseña: <code>MpPdAfCSPE2O23!</code>. Es más fácil de recordar y muy fuerte.</span>
+                        <span class="lang-en"><strong>Practice:</strong> Think of a long phrase that's easy for you to remember, for example: "My first car policy was with Protected Insurance in 2023!". Turn it into a password: <code>MfCpWwPIi2O23!</code>. It's easier to remember and very strong.</span>
+                    </p>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/11.png" alt="Secure Password Best Practices">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" id="slide-11">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">📱 Situaciones Comunes: MFA (Multi-Factor Authentication)</span>
+                        <span class="lang-en">📱 Common Situations: MFA (Multi-Factor Authentication)</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Lo que NO se debe hacer:</span>
+                    <span class="lang-en">What NOT to do:</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Confiar únicamente en una contraseña para proteger el acceso a sistemas críticos que contienen información de clientes, como nuestro sistema de gestión de pólizas o el correo electrónico corporativo. Deshabilitar MFA si está disponible.</span>
+                    <span class="lang-en">Relying solely on a password to protect access to critical systems containing client information, such as our policy management system or corporate email. Disabling MFA if it's available.</span>
+                </p>
+                 <div class="example-box">
+                    <h4>
+                        <span class="lang-es">Escenario: Sin MFA, Cuenta Comprometida</span>
+                        <span class="lang-en">Scenario: No MFA, Account Compromised</span>
+                    </h4>
+                    <p>
+                        <span class="lang-es">Un empleado tiene una contraseña fuerte, pero esta fue expuesta en una brecha de datos de otro servicio donde la reutilizó. Como no tiene MFA activada en su cuenta de Grupo Cooperativo Seguros Multiples, el atacante usa la contraseña robada y accede directamente a su correo y archivos, pudiendo enviar correos fraudulentos a clientes o robar documentos sensibles.</span>
+                        <span class="lang-en">An employee has a strong password, but it was exposed in a data breach from another service where they reused it. Since they don't have MFA enabled on their Protected Insurance Inc. account, the attacker uses the stolen password and directly accesses their email and files, potentially sending fraudulent emails to clients or stealing sensitive documents.</span>
+                    </p>
+                    <p>
+                        <span class="lang-es"><strong>Tabletop:</strong> Si un atacante accede al correo de un agente, ¿qué tipo de daño podría causar a nuestros clientes o a la reputación de Grupo Cooperativo Seguros Multiples?</span>
+                        <span class="lang-en"><strong>Tabletop:</strong> If an attacker accesses an agent's email, what kind of damage could they cause to our clients or Protected Insurance Inc.'s reputation?</span>
+                    </p>
+                </div>
+                <h2>
+                    <span class="lang-es">¿Cómo hacerlo bien? ✅</span>
+                    <span class="lang-en">How to do it right? ✅</span>
+                </h2>
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>Activa un segundo factor de seguridad (MFA) SIEMPRE</strong> que esté disponible para todas tus cuentas corporativas (correo, VPN, sistema de gestión de clientes). Esto puede ser:
+                            <ul>
+                                <li>Un código enviado a tu celular (one-time password - OTP).</li>
+                                <li>Una aplicación de autenticación (authenticator app como Google Authenticator o Microsoft Authenticator).</li>
+                                <li>Una llave de seguridad física (YubiKey).</li>
+                            </ul>
+                        </span>
+                        <span class="lang-en"><strong>ALWAYS enable a second security factor (MFA)</strong> whenever available for all your corporate accounts (email, VPN, client management system). This can be:
+                            <ul>
+                                <li>A code sent to your phone (one-time password - OTP).</li>
+                                <li>An authenticator app (like Google Authenticator or Microsoft Authenticator).</li>
+                                <li>A physical security key (YubiKey).</li>
+                            </ul>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Esto hace mucho más difícil que alguien entre a tu cuenta, ¡incluso si conocen tu contraseña! Necesitarían también tu segundo factor.</span>
+                        <span class="lang-en">This makes it much harder for someone to access your account, even if they know your password! They would also need your second factor.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Nunca compartas tus códigos OTP con nadie. El personal de IT de Grupo Cooperativo Seguros Multiples NUNCA te los pedirá.</span>
+                        <span class="lang-en">Never share your OTP codes with anyone. Protected Insurance Inc. IT staff will NEVER ask you for them.</span>
+                    </li>
+                </ul>
+                <div class="image-placeholder">
+                    <img src="img/12.png" alt="Multi-Factor Authentication Setup">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-12">
+            <div class="slide-header">
+                <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🛡️ Situaciones Comunes: Conexión Segura y VPN al Trabajar Remoto</span>
+                        <span class="lang-en">🛡️ Common Situations: Secure Connection & VPN for Remote Work</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Lo que NO se debe hacer:</span>
+                    <span class="lang-en">What NOT to do:</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Usar Wi-Fi público (en cafeterías, aeropuertos, hoteles) para acceder a sistemas de Grupo Cooperativo Seguros Multiples o manejar información sensible de clientes (ej. números de póliza, datos de siniestros) sin usar la VPN (Red Privada Virtual) de la empresa.</span>
+                    <span class="lang-en">Using public Wi-Fi (in coffee shops, airports, hotels) to access Protected Insurance Inc. systems or handle sensitive client information (e.g., policy numbers, claims data) without using the company's VPN (Virtual Private Network).</span>
+                </p>
+                <div class="example-box">
+                    <h4>
+                        <span class="lang-es">Escenario: Agente en Cafetería Sin VPN</span>
+                        <span class="lang-en">Scenario: Agent in Coffee Shop Without VPN</span>
+                    </h4>
+                    <p>
+                        <span class="lang-es">Un agente de Grupo Cooperativo Seguros Multiples está en una cafetería y necesita consultar rápidamente los detalles de la póliza de un cliente. Se conecta al Wi-Fi gratuito del local sin activar la VPN de la empresa. Un atacante en la misma red Wi-Fi ("Man-in-the-Middle attack") podría interceptar los datos de inicio de sesión del agente o la información del cliente que está viendo.</span>
+                        <span class="lang-en">A Protected Insurance Inc. agent is at a coffee shop and quickly needs to check a client's policy details. They connect to the shop's free Wi-Fi without activating the company VPN. An attacker on the same Wi-Fi network ("Man-in-the-Middle attack") could intercept the agent's login credentials or the client information they are viewing.</span>
+                    </p>
+                    <p>
+                        <span class="lang-es"><strong>Tabletop:</strong> ¿Qué información sensible podría quedar expuesta? ¿Cómo afectaría esto la confianza del cliente en Grupo Cooperativo Seguros Multiples?</span>
+                        <span class="lang-en"><strong>Tabletop:</strong> What sensitive information could be exposed? How would this affect the client's trust in Protected Insurance Inc.?</span>
+                    </p>
+                </div>
+                <h2>
+                    <span class="lang-es">¿Cómo hacerlo bien? ✅</span>
+                    <span class="lang-en">How to do it right? ✅</span>
+                </h2>
+                <ul>
+                    <li>
+                        <span class="lang-es">Usa <strong>SIEMPRE la VPN de Grupo Cooperativo Seguros Multiples</strong> cuando trabajes desde casa o te conectes a cualquier red Wi-Fi que no sea la de la oficina para acceder a recursos de la empresa.</span>
+                        <span class="lang-en"><strong>ALWAYS use the Protected Insurance Inc. VPN</strong> when working from home or connecting to any Wi-Fi network other than the office's to access company resources.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">La VPN crea un "túnel" cifrado y seguro para tu conexión, protegiendo los datos de miradas indiscretas, incluso en redes públicas.</span>
+                        <span class="lang-en">The VPN creates an encrypted and secure "tunnel" for your connection, protecting data from prying eyes, even on public networks.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Evita realizar transacciones financieras o manejar datos extremadamente sensibles en redes públicas, incluso con VPN si puedes evitarlo. Prioriza redes de confianza.</span>
+                        <span class="lang-en">Avoid conducting financial transactions or handling extremely sensitive data on public networks, even with a VPN if you can avoid it. Prioritize trusted networks.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Cierra tu sesión (logout) de los sistemas de la empresa cuando termines de trabajar, especialmente en dispositivos compartidos o si te alejas de tu equipo.</span>
+                        <span class="lang-en">Log out of company systems when you finish working, especially on shared devices or if you step away from your computer.</span>
+                    </li>
+                </ul>
+                <div class="image-placeholder">
+                    <img src="img/13.png" alt="VPN Secure Connection">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-13">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🚫 Situaciones Comunes: Zero Trust (Nunca confíes, siempre verifica)</span>
+                        <span class="lang-en">🚫 Common Situations: Zero Trust (Never trust, always verify)</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Principio Clave: "Nunca confíes, siempre verifica"</span>
+                    <span class="lang-en">Key Principle: "Never trust, always verify"</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Este principio significa que no debemos confiar automáticamente en ninguna solicitud o usuario, incluso si parece provenir de dentro de la red de Grupo Cooperativo Seguros Multiples Siempre se debe verificar la identidad y la autorización antes de conceder acceso o compartir información.</span>
+                    <span class="lang-en">This principle means we should not automatically trust any request or user, even if it seems to originate from within the Protected Insurance Inc. network. Identity and authorization should always be verified before granting access or sharing information.</span>
+                </p>
+                <h2>
+                    <span class="lang-es">Lo que NO se debe hacer:</span>
+                    <span class="lang-en">What NOT to do:</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Asumir que un correo electrónico es legítimo solo porque el nombre del remitente es de un compañero o un directivo. Confiar ciegamente en solicitudes de información "urgentes" sin verificar por un canal alternativo. Permitir que alguien use tu sesión iniciada.</span>
+                    <span class="lang-en">Assuming an email is legitimate just because the sender's name is a colleague or manager. Blindly trusting "urgent" information requests without verifying through an alternative channel. Allowing someone to use your logged-in session.</span>
+                </p>
+                 <div class="example-box">
+                    <h4>
+                        <span class="lang-es">Escenario: Falsa Urgencia del "Jefe"</span>
+                        <span class="lang-en">Scenario: Fake Urgency from the "Boss"</span>
+                    </h4>
+                    <p>
+                        <span class="lang-es">Un empleado recibe un correo que parece ser de su jefe directo, pidiéndole que compre urgentemente tarjetas de regalo por valor de $500 para "un cliente importante" y le envíe los códigos. El "jefe" dice que está en una reunión y no puede hacerlo él mismo.</span>
+                        <span class="lang-en">An employee receives an email that appears to be from their direct manager, asking them to urgently purchase $500 worth of gift cards for an "important client" and send them the codes. The "manager" claims to be in a meeting and unable to do it themselves.</span>
+                    </p>
+                    <p>
+                        <span class="lang-es"><strong>Tabletop (Zero Trust en Acción):</strong> ¿Qué debería hacer el empleado? ¿Confiaría en el correo solo porque "parece" del jefe? (Respuesta: Debería verificar la solicitud llamando al jefe o contactándolo por otro medio seguro, NUNCA responder directamente al correo con los códigos).</span>
+                        <span class="lang-en"><strong>Tabletop (Zero Trust in Action):</strong> What should the employee do? Would they trust the email just because it "looks" like it's from the boss? (Answer: They should verify the request by calling the manager or contacting them through another secure channel, NEVER reply directly to the email with the codes).</span>
+                    </p>
+                </div>
+                <h2>
+                    <span class="lang-es">¿Cómo hacerlo bien? ✅</span>
+                    <span class="lang-en">How to do it right? ✅</span>
+                </h2>
+                <ul>
+                    <li>
+                        <span class="lang-es">Siempre verifica la identidad del solicitante antes de compartir información sensible de clientes o de la empresa, especialmente si la solicitud es inusual o urgente. Usa un canal de comunicación diferente (ej. llamar al número de teléfono conocido).</span>
+                        <span class="lang-en">Always verify the requester's identity before sharing sensitive client or company information, especially if the request is unusual or urgent. Use a different communication channel (e.g., call a known phone number).</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">No compartas tus contraseñas (passwords) con NADIE, ni siquiera con compañeros o supervisores. El personal de IT nunca las necesitará.</span>
+                        <span class="lang-en">Do not share your passwords with ANYONE, not even colleagues or supervisors. IT staff will never need them.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Cuestiona solicitudes inesperadas de acceso o información. Es mejor ser cauteloso que lamentar una brecha de datos.</span>
+                        <span class="lang-en">Question unexpected requests for access or information. It's better to be cautious than to regret a data breach.</span>
+                    </li>
+                     <li>
+                        <span class="lang-es">Limita el acceso a la información solo a lo estrictamente necesario para tu función (Principio de Menor Privilegio).</span>
+                        <span class="lang-en">Limit access to information only to what is strictly necessary for your role (Principle of Least Privilege).</span>
+                    </li>
+                </ul>
+                <div class="image-placeholder">
+                    <img src="img/14.png" alt="Zero Trust Principle">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-14">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🎭 Situaciones Comunes: Ingeniería Social en el Entorno Asegurador</span>
+                        <span class="lang-en">🎭 Common Situations: Social Engineering in the Insurance Environment</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                 <h2>
+                    <span class="lang-es">¿Qué es? La manipulación psicológica para engañar a las personas y obtener información confidencial (como datos de pólizas, acceso a sistemas) o que realicen acciones perjudiciales.</span>
+                    <span class="lang-en">What is it? Psychological manipulation to trick people into divulging confidential information (like policy data, system access) or performing harmful actions.</span>
+                </h2>
+                <h2>
+                    <span class="lang-es">Lo que NO se debe hacer:</span>
+                    <span class="lang-en">What NOT to do:</span>
+                </h2>
+                <p>
+                    <span class="lang-es">Confiar en desconocidos o en solicitudes sospechosas sin verificar, especialmente si apelan a la urgencia, la autoridad o la curiosidad. NO proporcionar información sensible por teléfono o correo electrónico a menos que hayas iniciado tú el contacto y estés seguro de la identidad del receptor.</span>
+                    <span class="lang-en">Trusting strangers or suspicious requests without verification, especially if they appeal to urgency, authority, or curiosity. DO NOT provide sensitive information over the phone or email unless you initiated the contact and are sure of the recipient's identity.</span>
+                </p>
+                 <div class="example-box">
+                    <h4>
+                        <span class="lang-es">Escenario: El "Auditor Urgente"</span>
+                        <span class="lang-en">Scenario: The "Urgent Auditor"</span>
+                    </h4>
+                    <p>
+                        <span class="lang-es">Alguien llama a un empleado del departamento de reclamaciones, identificándose como un "auditor externo de la superintendencia de seguros" que necesita verificar urgentemente los detalles de 5 pólizas seleccionadas al azar, incluyendo nombres, direcciones y montos de cobertura, debido a una "investigación en curso". Pide que se le dicten los datos por teléfono para "ahorrar tiempo".</span>
+                        <span class="lang-en">Someone calls an employee in the claims department, identifying themselves as an "external auditor from the insurance commissioner's office" who urgently needs to verify the details of 5 randomly selected policies, including names, addresses, and coverage amounts, due to an "ongoing investigation." They ask for the data to be dictated over the phone to "save time."</span>
+                    </p>
+                    <p>
+                        <span class="lang-es"><strong>Tabletop:</strong> ¿Qué señales de alerta hay aquí? ¿Cómo debería proceder el empleado? (Respuesta: No ceder a la presión. Solicitar credenciales, un número de contacto oficial para devolver la llamada, y verificar internamente con su supervisor o el departamento legal antes de compartir NADA).</span>
+                        <span class="lang-en"><strong>Tabletop:</strong> What red flags are present here? How should the employee proceed? (Answer: Do not give in to pressure. Request credentials, an official contact number to call back, and verify internally with their supervisor or legal department before sharing ANYTHING).</span>
+                    </p>
+                </div>
+                <h2>
+                    <span class="lang-es">¿Cómo hacerlo bien? ✅</span>
+                    <span class="lang-en">How to do it right? ✅</span>
+                </h2>
+                <ul>
+                    <li>
+                        <span class="lang-es">Desconfía de personas que intenten ingresar sin autorización a las instalaciones (tailgating o "colarse"). No sostengas la puerta a desconocidos.</span>
+                        <span class="lang-en">Be wary of people trying to gain unauthorized access to facilities (tailgating). Do not hold the door for strangers.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">No reveles información sensible de clientes o de la empresa a desconocidos, incluso si parecen insistentes, amables o amenazantes.</span>
+                        <span class="lang-en">Do not reveal sensitive client or company information to strangers, even if they seem insistent, friendly, or threatening.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Verifica siempre la identidad de alguien que te pida información o acceso. Si es una llamada, pide devolverla a un número oficial de la empresa que representa.</span>
+                        <span class="lang-en">Always verify the identity of someone asking for information or access. If it's a call, ask to call them back at an official number for the company they represent.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Revisa cuidadosamente los correos electrónicos y desconfía de enlaces extraños, errores de ortografía (typos) o solicitudes inusuales.</span>
+                        <span class="lang-en">Carefully review emails and be wary of strange links, typos, or unusual requests.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Si alguien afirma ser del equipo técnico (interno o externo) y no está debidamente identificado o su solicitud es extraña, consulta con tu supervisor o con el departamento de IT (Ext. 2232) antes de permitir el acceso o seguir instrucciones.</span>
+                        <span class="lang-en">If someone claims to be from the technical team (internal or external) and is not properly identified or their request is strange, consult with your supervisor or the IT department (Ext. 2232) before allowing access or following instructions.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es">Reporta cualquier comportamiento o solicitud sospechosa al equipo de Seguridad de la Información o a tu supervisor.</span>
+                        <span class="lang-en">Report any suspicious behavior or request to the Information Security team or your supervisor.</span>
+                    </li>
+                </ul>
+                <div class="image-placeholder">
+                    <img src="img/15.png" alt="Social Engineering Awareness">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" id="slide-15">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">❌ 6. Los "Do Nots" en Ciberseguridad para Grupo Cooperativo Seguros Multiples</span>
+                        <span class="lang-en">❌ 6. Cybersecurity "Do Nots" for Protected Insurance Inc.</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">Acciones que DEBEMOS EVITAR para mantener la seguridad de la información de nuestros clientes y de la empresa.</span>
+                    <span class="lang-en">Actions to AVOID to maintain the security of our clients' and company's information.</span>
+                </h2>
+                <h3>
+                    <span class="lang-es">🔒 Contraseñas (Passwords) y Accesos</span>
+                    <span class="lang-en">🔒 Passwords and Access</span>
+                </h3>
+                <div class="no-no-grid">
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO usar la misma contraseña para tu correo de Grupo Cooperativo Seguros Multiples y tus redes sociales personales.</span>
+                            <span class="lang-en">DO NOT use the same password for your Protected Insurance Inc. email and your personal social media.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Si hackean una cuenta personal, ¡podrían intentar acceder a tu cuenta de trabajo!</span>
+                            <span class="lang-en">If your personal account is hacked, they might try to access your work account!</span>
+                        </p>
+                    </div>
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO desactivar o evitar la autenticación multifactor (MFA) en los sistemas de la empresa.</span>
+                            <span class="lang-en">DO NOT disable or bypass multi-factor authentication (MFA) on company systems.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Sin MFA, si roban tu contraseña (ej. de una lista de pólizas filtrada), tu cuenta queda expuesta.</span>
+                            <span class="lang-en">Without MFA, if your password is stolen (e.g., from a leaked policy list), your account is exposed.</span>
+                        </p>
+                    </div>
+                     <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO compartir tus credenciales de acceso (usuario/contraseña) con NADIE, ni compañeros, ni supervisores, ni supuestos técnicos.</span>
+                            <span class="lang-en">DO NOT share your access credentials (username/password) with ANYONE, not colleagues, supervisors, or supposed technicians.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Cada uno es responsable de su acceso.</span>
+                            <span class="lang-en">Everyone is responsible for their own access.</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/16.png" alt="Password Do Nots">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-16">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">❌ "Do Nots": Redes y Dispositivos</span>
+                        <span class="lang-en">❌ "Do Nots": Networks & Devices</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h3>
+                    <span class="lang-es">🌐 Seguridad en Redes (Networks) y Dispositivos (Devices)</span>
+                    <span class="lang-en">🌐 Network and Device Security</span>
+                </h3>
+                <div class="no-no-grid">
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO conectarse a WiFi público (aeropuerto, café) para acceder a datos de clientes SIN USAR la VPN de Grupo Cooperativo Seguros Multiples</span>
+                            <span class="lang-en">DO NOT connect to public Wi-Fi (airport, cafe) to access client data WITHOUT USING the Protected Insurance Inc. VPN.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">En redes abiertas, cualquiera podría espiar la información de una póliza o datos de un siniestro.</span>
+                            <span class="lang-en">On open networks, anyone could spy on policy information or claim data.</span>
+                        </p>
+                    </div>
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO omitir actualizaciones (updates) de software y del sistema operativo en tu equipo de trabajo.</span>
+                            <span class="lang-en">DO NOT skip software and operating system updates on your work computer.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Las actualizaciones corrigen fallos de seguridad que los hackers pueden explotar para acceder a los datos de los asegurados.</span>
+                            <span class="lang-en">Updates fix security flaws that hackers can exploit to access policyholder data.</span>
+                        </p>
+                    </div>
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO dejar la pantalla de tu computadora desbloqueada (unlocked) cuando te alejas de tu escritorio, ni siquiera por "un minuto".</span>
+                            <span class="lang-en">DO NOT leave your computer screen unlocked when you step away from your desk, not even for "just a minute."</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Alguien podría ver información confidencial de un cliente o usar tu sesión. Usa <code>Win+L</code> o <code>Ctrl+Cmd+Q</code>.</span>
+                            <span class="lang-en">Someone could see confidential client information or use your session. Use <code>Win+L</code> or <code>Ctrl+Cmd+Q</code>.</span>
+                        </p>
+                    </div>
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO descargar software, aplicaciones o extensiones de navegador de fuentes no confiables (untrusted sources) en tu equipo de trabajo.</span>
+                            <span class="lang-en">DO NOT download software, apps, or browser extensions from untrusted sources onto your work computer.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Esto puede instalar virus o malware que robe información de pólizas. Solo software aprobado por IT.</span>
+                            <span class="lang-en">This can install viruses or malware that steal policy information. Only IT-approved software.</span>
+                        </p>
+                    </div>
+                     <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO usar dispositivos USB personales o desconocidos en tu equipo de trabajo sin autorización de IT.</span>
+                            <span class="lang-en">DO NOT use personal or unknown USB devices on your work computer without IT authorization.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Podrían contener malware que se propague a nuestra red.</span>
+                            <span class="lang-en">They could contain malware that spreads to our network.</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/17.png" alt="Network and Device Do Nots">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-17">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">❌ "Do Nots": Conciencia y Reporte (Reporting)</span>
+                        <span class="lang-en">❌ "Do Nots": Awareness & Reporting</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h3>
+                    <span class="lang-es">📧 Conciencia (Awareness) y Reporte (Reporting)</span>
+                    <span class="lang-en">📧 Awareness and Reporting</span>
+                </h3>
+                <div class="no-no-grid">
+                     <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO hacer clic en enlaces (links) o abrir adjuntos en correos electrónicos sospechosos sin verificar primero.</span>
+                            <span class="lang-en">DO NOT click on links or open attachments in suspicious emails without verifying first.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Si parece un correo de un cliente pero el adjunto es un <code>.exe</code> o la solicitud es extraña, ¡ALERTA! Llama al cliente para confirmar.</span>
+                            <span class="lang-en">If it looks like a client email but the attachment is an <code>.exe</code> or the request is strange, ALERT! Call the client to confirm.</span>
+                        </p>
+                    </div>
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO compartir demasiada información sobre tu trabajo o Grupo Cooperativo Seguros Multiples en redes sociales o foros públicos.</span>
+                            <span class="lang-en">DO NOT share too much information about your job or Protected Insurance Inc. on social media or public forums.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Esto facilita a los atacantes crear ataques de ingeniería social personalizados (targeted attacks) contra ti o la empresa.</span>
+                            <span class="lang-en">This makes it easier for attackers to create personalized social engineering attacks (targeted attacks) against you or the company.</span>
+                        </p>
+                    </div>
+                    <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO dejar de reportar incidentes de seguridad o actividades sospechosas a tiempo a tu supervisor o a IT (Ext. 2232).</span>
+                            <span class="lang-en">DO NOT fail to report security incidents or suspicious activities promptly to your supervisor or IT (Ext. 2232).</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Cuanto antes se detecte un problema (ej. un posible acceso no autorizado a datos de un cliente), menor será el daño (damage) y más rápido podremos proteger a nuestros asegurados.</span>
+                            <span class="lang-en">The sooner a problem is detected (e.g., possible unauthorized access to a client's data), the less the damage, and the faster we can protect our policyholders.</span>
+                        </p>
+                    </div>
+                     <div class="no-no-item">
+                        <h4>
+                            <span class="lang-es">NO ignorar las políticas de seguridad de la información de Grupo Cooperativo Seguros Multiples</span>
+                            <span class="lang-en">DO NOT ignore Protected Insurance Inc.'s information security policies.</span>
+                        </h4>
+                        <p>
+                            <span class="lang-es">Están diseñadas para protegerte a ti, a nuestros clientes y a la empresa. Su cumplimiento es obligatorio.</span>
+                            <span class="lang-en">They are designed to protect you, our clients, and the company. Compliance is mandatory.</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="image-placeholder">
+                    <img src="img/18.png" alt="Awareness and Reporting Do Nots">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-18">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">🚨 7. Respuesta a Incidentes (Incident Response) en Grupo Cooperativo Seguros Multiples</span>
+                        <span class="lang-en">🚨 7. Incident Response at Protected Insurance Inc.</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h2>
+                    <span class="lang-es">¿Qué hacer si detectamos una amenaza o algo sospechoso (ej. posible acceso no autorizado a datos de una póliza)?</span>
+                    <span class="lang-en">What to do if we detect a threat or something suspicious (e.g., possible unauthorized access to policy data)?</span>
+                </h2>
+                <p>
+                    <span class="lang-es"><strong>¡Actúa Rápido y con Calma!</strong> Tu pronta respuesta es crucial.</span>
+                    <span class="lang-en"><strong>Act Fast and Calmly!</strong> Your prompt response is crucial.</span>
+                </p>
+                <div class="content-box">
+                    <h3>
+                        <span class="lang-es">Contacto Inmediato:</span>
+                        <span class="lang-en">Immediate Contact:</span>
+                    </h3>
+                    <p>
+                        <span class="lang-es">En caso de incidentes (correo sospechoso, comportamiento extraño de tu PC, posible brecha de datos de un cliente), contactar <strong>DE INMEDIATO</strong> al equipo de <strong>Seguridad de la Información (Information Security Team) / Departamento de IT</strong> a través del correo <strong><code>infosec@segurosprotegidos.com</code></strong> o mediante la extensión interna <strong>2232</strong>.</span>
+                        <span class="lang-en">In case of incidents (suspicious email, strange PC behavior, potential client data breach), <strong>IMMEDIATELY</strong> contact the <strong>Information Security Team / IT Department</strong> via email at <strong><code>infosec@protectedinsurance.com</code></strong> or through internal extension <strong>2232</strong>.</span>
+                    </p>
+                    <p>
+                        <span class="lang-es">Informa también a tu <strong>supervisor directo</strong> lo antes posible.</span>
+                        <span class="lang-en">Also, inform your <strong>direct supervisor</strong> as soon as possible.</span>
+                    </p>
+                </div>
+                <h3>
+                    <span class="lang-es">Información a Proporcionar (si es posible):</span>
+                    <span class="lang-en">Information to Provide (if possible):</span>
+                </h3>
+                <ul>
+                    <li><span class="lang-es">Qué ocurrió (ej. recibí un correo, mi PC se reinició sola, un cliente reportó algo extraño).</span><span class="lang-en">What happened (e.g., received an email, PC rebooted itself, a client reported something strange).</span></li>
+                    <li><span class="lang-es">Cuándo ocurrió (fecha y hora aproximada).</span><span class="lang-en">When it occurred (approximate date and time).</span></li>
+                    <li><span class="lang-es">Qué sistemas o datos están afectados (ej. mi correo, el sistema de pólizas, datos del cliente X).</span><span class="lang-en">What systems or data are affected (e.g., my email, policy system, client X's data).</span></li>
+                    <li><span class="lang-es">Cualquier mensaje de error o comportamiento inusual.</span><span class="lang-en">Any error messages or unusual behavior.</span></li>
+                    <li><span class="lang-es">NO intentes solucionar el problema tú mismo si no estás seguro, podrías empeorarlo o borrar evidencia. NO apagues el equipo a menos que te lo indique IT.</span><span class="lang-en">DO NOT try to fix the problem yourself if unsure, you could worsen it or delete evidence. DO NOT turn off the computer unless instructed by IT.</span></li>
+                </ul>
+                <div class="image-placeholder">
+                    <img src="img/19.png" alt="Incident Response Protocol">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-19">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">📢 Cómo Responder Ante Amenazas Específicas</span>
+                        <span class="lang-en">📢 How to Respond to Specific Threats</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content">
+                <h3>
+                    <span class="lang-es">Acciones Clave (Key Actions):</span>
+                    <span class="lang-en">Key Actions:</span>
+                </h3>
+                <ul>
+                    <li>
+                        <span class="lang-es"><strong>Correo de Phishing Recibido:</strong> NO hagas clic en enlaces, NO descargues adjuntos, NO respondas. Reenvíalo como adjunto al equipo de IT/Seguridad (<code>infosec@segurosprotegidos.com</code>) y luego elimínalo.</span>
+                        <span class="lang-en"><strong>Phishing Email Received:</strong> DO NOT click links, DO NOT download attachments, DO NOT reply. Forward it as an attachment to the IT/Security team (<code>infosec@protectedinsurance.com</code>) and then delete it.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Actividad Inusual en tu Cuenta (ej. correos enviados que no escribiste):</strong> Cambia tu contraseña inmediatamente y reporta a IT/Seguridad. Activa MFA si no lo has hecho.</span>
+                        <span class="lang-en"><strong>Unusual Account Activity (e.g., emails sent you didn't write):</strong> Change your password immediately and report to IT/Security. Enable MFA if you haven't.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Dispositivo de Trabajo Perdido o Robado (laptop, celular corporativo):</strong> Reporta INMEDIATAMENTE a IT/Seguridad y a tu supervisor para que puedan bloquear el acceso y proteger los datos de la empresa y clientes.</span>
+                        <span class="lang-en"><strong>Lost or Stolen Work Device (laptop, corporate phone):</strong> Report IMMEDIATELY to IT/Security and your supervisor so they can block access and protect company and client data.</span>
+                    </li>
+                    <li>
+                        <span class="lang-es"><strong>Llamada Sospechosa (Vishing) Pidiendo Información de Clientes:</strong> NO proporciones la información. Pide el nombre, departamento y número de la persona. Di que verificarás y devolverás la llamada. Cuelga y reporta. NO uses el número que te dieron, busca uno oficial.</span>
+                        <span class="lang-en"><strong>Suspicious Call (Vishing) Asking for Client Information:</strong> DO NOT provide the information. Ask for the person's name, department, and number. Say you will verify and call back. Hang up and report. DO NOT use the number they gave you, find an official one.</span>
+                    </li>
+                     <li>
+                        <span class="lang-es"><strong>Si accidentalmente haces clic en un enlace sospechoso o abres un adjunto malicioso:</strong> Desconecta tu computadora de la red (quita el cable o apaga el Wi-Fi) INMEDIATAMENTE y llama a IT/Seguridad (Ext. 2232) para obtener instrucciones.</span>
+                        <span class="lang-en"><strong>If you accidentally click a suspicious link or open a malicious attachment:</strong> Disconnect your computer from the network (unplug cable or turn off Wi-Fi) IMMEDIATELY and call IT/Security (Ext. 2232) for instructions.</span>
+                    </li>
+                </ul>
+                <div class="regulation-card">
+                    <h3>
+                        <span class="lang-es">Ejemplo Real: Respuesta Rápida Evita Desastre</span>
+                        <span class="lang-en">Real Example: Quick Response Averts Disaster</span>
+                    </h3>
+                    <p>
+                        <span class="lang-es">Un agente de Grupo Cooperativo Seguros Multiples notó que su computadora se volvió muy lenta después de abrir un PDF que parecía ser una solicitud de póliza de un "nuevo cliente". En lugar de ignorarlo, lo reportó de inmediato a IT. Resultó ser un nuevo tipo de ransomware. Gracias a su rápida acción, IT pudo aislar su máquina antes de que el ransomware se propagara a otros sistemas y cifrara los datos de los clientes.</span>
+                        <span class="lang-en">A Protected Insurance Inc. agent noticed their computer became very slow after opening a PDF that appeared to be a policy application from a "new client." Instead of ignoring it, they reported it immediately to IT. It turned out to be a new type of ransomware. Thanks to their quick action, IT was able to isolate their machine before the ransomware spread to other systems and encrypted client data.</span>
+                    </p>
+                </div>
+                <p>
+                    <span class="lang-es">👉 Si vemos algo sospechoso, debemos actuar rápido. La seguridad es responsabilidad de todos.</span>
+                    <span class="lang-en">👉 If we see something suspicious, we must act quickly. Security is everyone's responsibility.</span>
+                </p>
+                <div class="image-placeholder">
+                    <img src="img/20.png" alt="Responding to Cyber Threats">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-20">
+            <div class="slide-header">
+                 <div class="title-block">
+                    <h1>
+                        <span class="lang-es">💬 Reflexión Final y Preguntas</span>
+                        <span class="lang-en">💬 Final Thoughts & Questions</span>
+                    </h1>
+                </div>
+                <div class="slide-progress-info">
+                    <span class="slide-timer"></span>
+                    <span class="slide-number"></span>
+                </div>
+            </div>
+            <div class="slide-content" style="text-align: center;">
+                 <div class="image-placeholder">
+                    <img src="img/21.png" alt="Final Thoughts on Cybersecurity">
+                </div>
+                <h2>
+                    <span class="lang-es">La Seguridad es Responsabilidad de Todos en Grupo Cooperativo Seguros Multiples</span>
+                    <span class="lang-en">Security is Everyone's Responsibility at Protected Insurance Inc.</span>
+                </h2>
+                <p style="font-size: 1.25em; color: #555; margin: 20px 0;">
+                    <span class="lang-es">"Cuidar la información de las personas y empresas que confían en nosotros (nuestros asegurados) no es solo una obligación legal, es fundamental para nuestra reputación y la continuidad de nuestro negocio. Cada acción cuenta para evitar situaciones difíciles y fortalecer la confianza. La seguridad digital es una parte integral de nuestro servicio en Grupo Cooperativo Seguros Multiples"</span>
+                    <span class="lang-en">"Protecting the information of the people and businesses who trust us (our policyholders) is not just a legal obligation, it's fundamental to our reputation and business continuity. Every action counts to avoid difficult situations and strengthen trust. Digital security is an integral part of our service at Protected Insurance Inc."</span>
+                </p>
+                <p>
+                    <span class="lang-es">Si vemos algo sospechoso, debemos actuar rápido. No tengan miedo de preguntar o reportar. Es mejor prevenir.</span>
+                    <span class="lang-en">If we see something suspicious, we must act fast. Don't be afraid to ask or report. It's better to prevent.</span>
+                </p>
+                <div class="content-box" style="margin-top: 30px;">
+                    <h3>
+                        <span class="lang-es">¿Preguntas?</span>
+                        <span class="lang-en">Questions?</span>
+                    </h3>
+                    <p>
+                        <span class="lang-es">Este es el momento de aclarar cualquier duda que tengan sobre ciberseguridad, las políticas de Grupo Cooperativo Seguros Multiples, o cómo actuar en una situación específica. ¡Su participación es clave!</span>
+                        <span class="lang-en">This is the time to clarify any doubts you may have about cybersecurity, Protected Insurance Inc.'s policies, or how to act in a specific situation. Your participation is key!</span>
+                    </p>
+                    <p>
+                        <span class="lang-es">Contacto para dudas post-training: IT/Seguridad, Ext. <strong>2232</strong> o <strong><code>infosec@segurosprotegidos.com</code></strong></span>
+                        <span class="lang-en">Contact for post-training questions: IT/Security, Ext. <strong>2232</strong> or <strong><code>infosec@protectedinsurance.com</code></strong></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="slide-indicator" id="slideIndicatorContainer">
+        </div>
+
+    <div class="controls">
+        <button class="control-btn" id="prevBtn">
+            <span class="lang-es">⬅️ Anterior</span>
+            <span class="lang-en" style="display:none;">⬅️ Previous</span>
+        </button>
+        
+        <div id="slide1CustomAudioControls" style="display: none;"> 
+            <button id="playPauseBtnSlide1" class="control-btn audio-custom-btn">
+                <span class="lang-es">▶️ Rep.</span>
+                <span class="lang-en" style="display:none;">▶️ Play</span>
+            </button>
+            <button id="rewindBtnSlide1" class="control-btn audio-custom-btn">
+                <span class="lang-es">⏪ 10s</span>
+                <span class="lang-en" style="display:none;">⏪ 10s</span>
+            </button>
+            <button id="forwardBtnSlide1" class="control-btn audio-custom-btn">
+                <span class="lang-es">⏩ 10s</span>
+                <span class="lang-en" style="display:none;">⏩ 10s</span>
+            </button>
+            <div class="audio-time-display">
+                <span class="lang-es" style="color:white; margin-right:2px;">Tiempo: </span><span class="lang-en" style="display:none; color:white; margin-right:2px;">Time: </span>
+                <span id="currentTimeSlide1" style="color:white;">0:00</span><span style="color:white;"> / </span><span id="durationSlide1" style="color:white;">0:00</span>
+            </div>
+        </div>
+
+        <button class="control-btn" id="nextBtn">
+            <span class="lang-es">Siguiente ➡️</span>
+            <span class="lang-en" style="display:none;">Next ➡️</span>
+        </button>
+    </div>
+
+    <button id="languageToggleBtn">
+        <span class="lang-es-btn-text">Switch to English</span>
+        <span class="lang-en-btn-text" style="display:none;">Cambiar a Español</span>
+    </button>
+    <button id="fullscreenToggleBtn" title="Pantalla Completa">
+        <span class="lang-es">🖥️ Completa</span>
+        <span class="lang-en" style="display:none;">🖥️ Fullscreen</span>
+    </button>
+
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide-container .slide');
+        const totalSlides = slides.length;
+        const slideIndicatorContainer = document.getElementById('slideIndicatorContainer');
+        const prevButton = document.getElementById('prevBtn');
+        const nextButton = document.getElementById('nextBtn');
+        const languageToggleBtn = document.getElementById('languageToggleBtn');
+        const fullscreenToggleBtn = document.getElementById('fullscreenToggleBtn');
+        let currentLanguage = 'es'; 
+
+        const slideTimes = [ 
+            30,  60,  60, 150, 150, 120, 180, 240, 210, 210,
+            120, 120, 120, 120, 150, 100, 100, 100, 120, 120, 120
+        ];
+        let currentTimerInterval;
+
+        const audioSlide1 = document.getElementById('slide1Audio');
+        const playPauseBtnSlide1 = document.getElementById('playPauseBtnSlide1');
+        const rewindBtnSlide1 = document.getElementById('rewindBtnSlide1');
+        const forwardBtnSlide1 = document.getElementById('forwardBtnSlide1');
+        const currentTimeDisplaySlide1 = document.getElementById('currentTimeSlide1');
+        const durationDisplaySlide1 = document.getElementById('durationSlide1');
+        const slide1CustomAudioControls = document.getElementById('slide1CustomAudioControls');
+
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+            return `${formattedMinutes}:${formattedSeconds}`;
+        }
+
+        function startSlideTimer(slideIndex) {
+            clearInterval(currentTimerInterval); 
+            if (slideIndex < 0 || slideIndex >= slides.length) return;
+
+            const timerElement = slides[slideIndex].querySelector('.slide-header .slide-timer');
+            if (!timerElement) return;
+
+            let timeLeft = slideTimes[slideIndex] || 0; 
+            timerElement.textContent = formatTime(timeLeft);
+
+            if (!slideTimes[slideIndex] || timeLeft <=0) {
+                timerElement.textContent = (currentLanguage === 'es') ? "N/A" : "N/A";
+                if (timeLeft <= 0 && slideTimes[slideIndex]) { 
+                     timerElement.textContent = (currentLanguage === 'es') ? "Tiempo agotado" : "Time's up";
+                }
+                return;
+            }
+            
+            currentTimerInterval = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = formatTime(timeLeft);
+                if (timeLeft <= 0) {
+                    clearInterval(currentTimerInterval);
+                    timerElement.textContent = (currentLanguage === 'es') ? "Tiempo agotado" : "Time's up";
+                }
+            }, 1000);
+        }
+        
+        function updateLanguageContentVisibility(lang) {
+            slides.forEach(slide => {
+                slide.querySelectorAll('.lang-es').forEach(el => el.style.display = (lang === 'es' ? '' : 'none'));
+                slide.querySelectorAll('.lang-en').forEach(el => el.style.display = (lang === 'en' ? '' : 'none'));
+            });
+
+            const langBtnEsText = languageToggleBtn.querySelector('.lang-es-btn-text');
+            const langBtnEnText = languageToggleBtn.querySelector('.lang-en-btn-text');
+            if (langBtnEsText) langBtnEsText.style.display = (lang === 'es' ? 'inline' : 'none');
+            if (langBtnEnText) langBtnEnText.style.display = (lang === 'en' ? 'inline' : 'none');
+            
+            updateNavButtonsText(); 
+            updateFullscreenButtonText(); 
+
+            if (playPauseBtnSlide1) { 
+                const audioS1 = document.getElementById('slide1Audio'); 
+                const btnEs = playPauseBtnSlide1.querySelector('.lang-es');
+                const btnEn = playPauseBtnSlide1.querySelector('.lang-en');
+                if (audioS1 && (audioS1.paused || audioS1.ended)) {
+                    if(btnEs) btnEs.textContent = '▶️ Rep.';
+                    if(btnEn) btnEn.textContent = '▶️ Play';
+                } else if (audioS1) {
+                    if(btnEs) btnEs.textContent = '⏸️ Pausa';
+                    if(btnEn) btnEn.textContent = '⏸️ Pause';
+                }
+                if(btnEs) btnEs.style.display = (lang === 'es' ? 'inline' : 'none');
+                if(btnEn) btnEn.style.display = (lang === 'en' ? 'inline' : 'none');
+            }
+            if(rewindBtnSlide1) {
+                rewindBtnSlide1.querySelector('.lang-es').style.display = (lang === 'es' ? 'inline' : 'none');
+                rewindBtnSlide1.querySelector('.lang-en').style.display = (lang === 'en' ? 'inline' : 'none');
+            }
+            if(forwardBtnSlide1) {
+                forwardBtnSlide1.querySelector('.lang-es').style.display = (lang === 'es' ? 'inline' : 'none');
+                forwardBtnSlide1.querySelector('.lang-en').style.display = (lang === 'en' ? 'inline' : 'none');
+            }
+            const timeLabelContainer = document.querySelector('#slide1CustomAudioControls .audio-time-display');
+            if (timeLabelContainer) {
+                const timeEs = timeLabelContainer.querySelector('.lang-es');
+                const timeEn = timeLabelContainer.querySelector('.lang-en');
+                if (timeEs) timeEs.style.display = (lang === 'es' ? 'inline' : 'none');
+                if (timeEn) timeEn.style.display = (lang === 'en' ? 'inline' : 'none');
+            }
+        }
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.documentElement.lang = lang; 
+            
+            updateLanguageContentVisibility(currentLanguage);
+
+            if (currentSlideIndex >= 0 && currentSlideIndex < slides.length) {
+                const activeTimerElement = slides[currentSlideIndex].querySelector('.slide-header .slide-timer');
+                if (activeTimerElement) {
+                    if (activeTimerElement.textContent === "Tiempo agotado" || activeTimerElement.textContent === "Time's up") {
+                        activeTimerElement.textContent = (currentLanguage === 'es') ? "Tiempo agotado" : "Time's up";
+                    } else if (activeTimerElement.textContent === "N/A") {
+                        activeTimerElement.textContent = (currentLanguage === 'es') ? "N/A" : "N/A";
+                    }
+                }
+            }
+        }
+
+        function toggleLanguage() {
+            setLanguage(currentLanguage === 'es' ? 'en' : 'es');
+        }
+        
+        function updateNavButtonsText() {
+            if (!prevButton || !nextButton) return;
+            const prevTextEs = "⬅️ Anterior";
+            const prevTextEn = "⬅️ Previous";
+            const nextTextEs = "Siguiente ➡️";
+            const nextTextEn = "Next ➡️";
+            const finishTextEs = "🏁 Finalizar";
+            const finishTextEn = "🏁 Finish";
+            
+            prevButton.innerHTML = ''; 
+            const prevSpanEs = document.createElement('span'); prevSpanEs.className = 'lang-es'; prevSpanEs.textContent = prevTextEs;
+            const prevSpanEn = document.createElement('span'); prevSpanEn.className = 'lang-en'; prevSpanEn.textContent = prevTextEn;
+            prevButton.appendChild(prevSpanEs); prevButton.appendChild(prevSpanEn);
+
+            nextButton.innerHTML = ''; 
+            const nextSpanEs = document.createElement('span'); nextSpanEs.className = 'lang-es';
+            const nextSpanEn = document.createElement('span'); nextSpanEn.className = 'lang-en';
+
+            if (currentSlideIndex === totalSlides - 1) {
+                nextSpanEs.textContent = finishTextEs;
+                nextSpanEn.textContent = finishTextEn;
+            } else {
+                nextSpanEs.textContent = nextTextEs;
+                nextSpanEn.textContent = nextTextEn;
+            }
+            nextButton.appendChild(nextSpanEs); nextButton.appendChild(nextSpanEn);
+
+            prevButton.querySelector('.lang-es').style.display = (currentLanguage === 'es' ? 'inline' : 'none');
+            prevButton.querySelector('.lang-en').style.display = (currentLanguage === 'en' ? 'inline' : 'none');
+            nextButton.querySelector('.lang-es').style.display = (currentLanguage === 'es' ? 'inline' : 'none');
+            nextButton.querySelector('.lang-en').style.display = (currentLanguage === 'en' ? 'inline' : 'none');
+        }
+        
+        function getFullscreenElement() {
+            return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+        }
+
+        function toggleFullscreen() {
+            if (!getFullscreenElement()) {
+                if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+                else if (document.documentElement.webkitRequestFullscreen) document.documentElement.webkitRequestFullscreen();
+                else if (document.documentElement.mozRequestFullScreen) document.documentElement.mozRequestFullScreen();
+                else if (document.documentElement.msRequestFullscreen) document.documentElement.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        function updateFullscreenButtonText() {
+            if (!fullscreenToggleBtn) return;
+            const btnEsTextEnter = "🖥️ Completa";
+            const btnEsTextExit = "🖥️ Salir";
+            const btnEnTextEnter = "🖥️ Fullscreen";
+            const btnEnTextExit = "🖥️ Exit Full";
+            
+            let esSpan = fullscreenToggleBtn.querySelector('.lang-es');
+            let enSpan = fullscreenToggleBtn.querySelector('.lang-en');
+
+            if (!esSpan) {
+                esSpan = document.createElement('span');
+                esSpan.className = 'lang-es';
+                fullscreenToggleBtn.appendChild(esSpan);
+            }
+            if (!enSpan) {
+                enSpan = document.createElement('span');
+                enSpan.className = 'lang-en';
+                fullscreenToggleBtn.appendChild(enSpan);
+            }
+
+            if (getFullscreenElement()) {
+                esSpan.textContent = btnEsTextExit;
+                enSpan.textContent = btnEnTextExit;
+            } else {
+                esSpan.textContent = btnEsTextEnter;
+                enSpan.textContent = btnEnTextEnter;
+            }
+            esSpan.style.display = (currentLanguage === 'es' ? 'inline' : 'none');
+            enSpan.style.display = (currentLanguage === 'en' ? 'inline' : 'none');
+        }
+
+        function createDots() {
+            if (!slideIndicatorContainer) return;
+            slideIndicatorContainer.innerHTML = ''; 
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                dot.addEventListener('click', () => goToSlide(i));
+                slideIndicatorContainer.appendChild(dot);
+            }
+        }
+
+        function updateDots() {
+            if (!slideIndicatorContainer) return;
+            const dots = slideIndicatorContainer.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlideIndex);
+            });
+        }
+        
+        function updateSlideNumbers() {
+            slides.forEach((slide, index) => {
+                const slideNumberElement = slide.querySelector('.slide-header .slide-number');
+                if (slideNumberElement) {
+                    slideNumberElement.textContent = `${index + 1}/${totalSlides}`;
+                }
+            });
+        }
+
+        function showSlide(index) {
+            if (index >= totalSlides || index < 0 || slides.length === 0) return;
+
+            slides.forEach((slide) => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+            currentSlideIndex = index;
+            
+            setLanguage(currentLanguage); 
+            startSlideTimer(currentSlideIndex); 
+            updateDots();
+            updateNavButtonsStatus();
+
+            if (slide1CustomAudioControls) {
+                if (slides[index].id === 'slide-1') {
+                    slide1CustomAudioControls.style.display = 'flex'; 
+                } else {
+                    slide1CustomAudioControls.style.display = 'none';
+                    if(audioSlide1 && !audioSlide1.paused) { 
+                        audioSlide1.pause();
+                        const btnEs = playPauseBtnSlide1.querySelector('.lang-es');
+                        const btnEn = playPauseBtnSlide1.querySelector('.lang-en');
+                        if(btnEs) btnEs.textContent = '▶️ Rep.';
+                        if(btnEn) btnEn.textContent = '▶️ Play';
+                        if(btnEs) btnEs.style.display = (currentLanguage === 'es' ? 'inline' : 'none');
+                        if(btnEn) btnEn.style.display = (currentLanguage === 'en' ? 'inline' : 'none');
+                    }
+                }
+            }
+        }
+
+        function updateNavButtonsStatus() { 
+            if (!prevButton || !nextButton) return;
+            prevButton.disabled = currentSlideIndex === 0;
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < totalSlides - 1) {
+                showSlide(currentSlideIndex + 1);
+            } else {
+                alert(currentLanguage === 'es' ? '¡Entrenamiento completado!' : 'Training completed!');
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlideIndex > 0) {
+                showSlide(currentSlideIndex - 1);
+            }
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+        }
+
+        function setupSlide1Audio() {
+            if (!audioSlide1 || !playPauseBtnSlide1 || !rewindBtnSlide1 || !forwardBtnSlide1 || !currentTimeDisplaySlide1 || !durationDisplaySlide1) {
+                return; 
+            }
+
+            playPauseBtnSlide1.addEventListener('click', () => {
+                const esText = playPauseBtnSlide1.querySelector('.lang-es');
+                const enText = playPauseBtnSlide1.querySelector('.lang-en');
+                if (audioSlide1.paused || audioSlide1.ended) {
+                    audioSlide1.play();
+                    if (esText) esText.textContent = '⏸️ Pausa';
+                    if (enText) enText.textContent = '⏸️ Pause';
+                } else {
+                    audioSlide1.pause();
+                    if (esText) esText.textContent = '▶️ Rep.';
+                    if (enText) enText.textContent = '▶️ Play';
+                }
+                if (esText) esText.style.display = (currentLanguage === 'es' ? 'inline' : 'none');
+                if (enText) enText.style.display = (currentLanguage === 'en' ? 'inline' : 'none');
+            });
+
+            rewindBtnSlide1.addEventListener('click', () => {
+                audioSlide1.currentTime = Math.max(0, audioSlide1.currentTime - 10);
+            });
+
+            forwardBtnSlide1.addEventListener('click', () => {
+                if (audioSlide1.duration && !isNaN(audioSlide1.duration)) { 
+                    audioSlide1.currentTime = Math.min(audioSlide1.duration, audioSlide1.currentTime + 10);
+                } else {
+                    audioSlide1.currentTime += 10; 
+                }
+            });
+
+            audioSlide1.addEventListener('loadedmetadata', () => {
+                if (durationDisplaySlide1 && audioSlide1.duration && !isNaN(audioSlide1.duration)) {
+                    durationDisplaySlide1.textContent = formatTime(Math.floor(audioSlide1.duration));
+                } else if (durationDisplaySlide1) {
+                     durationDisplaySlide1.textContent = "0:00"; 
+                }
+            });
+
+            audioSlide1.addEventListener('timeupdate', () => {
+                if (currentTimeDisplaySlide1) currentTimeDisplaySlide1.textContent = formatTime(Math.floor(audioSlide1.currentTime));
+            });
+
+            audioSlide1.addEventListener('ended', () => {
+                const esText = playPauseBtnSlide1.querySelector('.lang-es');
+                const enText = playPauseBtnSlide1.querySelector('.lang-en');
+                if (esText) esText.textContent = '▶️ Rep.';
+                if (enText) enText.textContent = '▶️ Play';
+                if (audioSlide1.duration && !isNaN(audioSlide1.duration) && currentTimeDisplaySlide1) {
+                     currentTimeDisplaySlide1.textContent = formatTime(Math.floor(audioSlide1.duration));
+                } else if (currentTimeDisplaySlide1) {
+                     currentTimeDisplaySlide1.textContent = "0:00";
+                }
+                if (esText) esText.style.display = (currentLanguage === 'es' ? 'inline' : 'none');
+                if (enText) enText.style.display = (currentLanguage === 'en' ? 'inline' : 'none');
+            });
+        }
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', previousSlide);
+            nextButton.addEventListener('click', nextSlide);
+        }
+        if (languageToggleBtn) {
+            languageToggleBtn.addEventListener('click', toggleLanguage);
+        }
+         if (fullscreenToggleBtn) {
+            fullscreenToggleBtn.addEventListener('click', toggleFullscreen);
+            ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(event => 
+                document.addEventListener(event, updateFullscreenButtonText)
+            );
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (slides.length === 0) return; 
+            const activeElement = document.activeElement;
+            if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA' || activeElement.isContentEditable || activeElement.tagName === 'AUDIO')) {
+                if(activeElement.tagName === 'AUDIO' && (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === ' ')) {
+                    return;
+                }
+                if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA' || activeElement.isContentEditable){
+                    return;
+                }
+            }
+
+            if (e.key === 'ArrowRight' || e.key === ' ') { 
+                nextSlide();
+                e.preventDefault(); 
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+                e.preventDefault();
+            } else if (e.key >= '1' && e.key <= '9') {
+                 const slideNum = parseInt(e.key) - 1;
+                 if (slideNum < totalSlides && slideNum < 9) { 
+                     goToSlide(slideNum);
+                 }
+            } else if (e.key === '0' && totalSlides >= 10){
+                goToSlide(9);
+            } else if (e.key.toLowerCase() === 'f'){ 
+                toggleFullscreen();
+                e.preventDefault();
+            } else if (e.key.toLowerCase() === 'l'){ 
+                toggleLanguage();
+                e.preventDefault();
+            }
+        });
+        
+        function initSlideshow() {
+            if (totalSlides > 0) {
+                createDots();
+                updateSlideNumbers(); 
+                setLanguage('es'); 
+                showSlide(0); 
+                
+                if (document.getElementById('slide1Audio')) { // Asegurarse de llamar esto DESPUÉS de que showSlide(0) haya podido establecer el idioma.
+                    setupSlide1Audio();
+                }
+
+            } else {
+                if(slideIndicatorContainer) slideIndicatorContainer.style.display = 'none';
+                if(prevButton) prevButton.style.display = 'none';
+                if(nextButton) nextButton.style.display = 'none';
+                if(languageToggleBtn) languageToggleBtn.style.display = 'none';
+                if(fullscreenToggleBtn) fullscreenToggleBtn.style.display = 'none';
+                console.warn("No slides found to initialize slideshow.");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initSlideshow);
+    </script>
+</body>
+</html>
